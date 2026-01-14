@@ -1,0 +1,179 @@
+_schema-version: 3.3.0
+ID: sample
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: sample-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: sample-auth
+  - name: sample-db
+  - name: sample-destination
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    instances: 1
+  build-parameters:
+    builder: npm-ci
+- name: sample-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: sample-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: sample-app-deployer
+  type: com.sap.application.content
+  path: gen
+  requires:
+  - name: sample-auth
+  - name: srv-api
+  - name: sample-html5-repo-host
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+      content-target: true
+  build-parameters:
+    build-result: app/
+    requires:
+    - artifacts:
+      - inventory_sample.zip
+      name: sampleinventory_sample
+      target-path: app/
+    - artifacts:
+      - inventorysample.zip
+      name: inventorysample
+      target-path: app/
+    - artifacts:
+      - inventorylist.zip
+      name: inventorylist
+      target-path: app/
+- name: sampleinventory_sample
+  type: html5
+  path: app/inventory_sample
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: sample-destinations
+  type: com.sap.application.content
+  requires:
+  - name: sample-auth
+    parameters:
+      service-key:
+        name: sample-auth-key
+  - name: sample-html5-repo-host
+    parameters:
+      service-key:
+        name: sample-html5-repo-host-key
+  - name: srv-api
+  - name: sample-destination
+    parameters:
+      content-target: true
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: sample-html5-repository
+          ServiceInstanceName: sample-html5-repo-host
+          ServiceKeyName: sample-html5-repo-host-key
+          sap.cloud.service: sample.service
+        - Authentication: OAuth2UserTokenExchange
+          Name: sample-auth
+          ServiceInstanceName: sample-auth
+          ServiceKeyName: sample-auth-key
+          sap.cloud.service: sample.service
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+- name: inventorysample
+  type: html5
+  path: app/inventory_sample
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: inventorylist
+  type: html5
+  path: app/inventory_list
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: sample-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      tenant-mode: dedicated
+      xsappname: sample-${org}-${space}
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+- name: sample-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: sample-destination
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+    service: destination
+    service-plan: lite
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+- name: sample-html5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
+- name: sample-html5-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production

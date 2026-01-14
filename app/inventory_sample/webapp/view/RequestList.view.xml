@@ -1,0 +1,139 @@
+<mvc:View controllerName="inventorysample.controller.RequestList" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:fb="sap.ui.comp.filterbar" xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:layout="sap.ui.layout">
+    <Page id="_IDGenPage2" title="System Requests" showNavButton="true" navButtonPress=".onNavBack">
+        <content>
+            <fb:FilterBar id="requestFilterBar" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+                
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem" name="User" label="Requested By" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterUser" items="{
+												path: '/Users',
+												templateShareable: true
+											}">
+        
+                                <items>
+                                    <core:Item id="_IDGenItemaA" xmlns:core="sap.ui.core" key="{ID}" text="{name} - {email}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem2" name="Status" label="Status" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterStatus">
+                                <items>
+                                    <core:Item id="_IDGenItem" xmlns:core="sap.ui.core" key="PENDING" text="Pending" />
+                                    <core:Item id="_IDGenItem1" xmlns:core="sap.ui.core" key="APPROVED" text="Approved" />
+                                    <core:Item id="_IDGenItem2" xmlns:core="sap.ui.core" key="PARTIAL" text="Partial" />
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem2a" name="Request ID" label="Request ID" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <ComboBox id="filterRequestNo" items="{
+												path: '/Requests',
+												templateShareable: true
+											}">
+        
+                                <items>
+                                    <core:Item id="_IDGenItema" xmlns:core="sap.ui.core" key="{requestNo}" text="{requestNo}" />
+                                    
+                                </items>
+                            </ComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem2ab" name="Request type" label="Request Type" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterRequestType">
+                                <items>
+                                    <core:Item id="_IDGenItemr" xmlns:core="sap.ui.core" key="request" text="Request" />
+                                    <core:Item id="_IDGenItem1r" xmlns:core="sap.ui.core" key="return" text="Return" />
+                                    <core:Item id="_IDGenItem2r" xmlns:core="sap.ui.core" key="repair" text="Repair" />
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                </fb:filterGroupItems>
+
+                <HBox id="kpiHeader" width="100%" justifyContent="SpaceBetween" alignItems="Center" class="sapUiMediumMarginBeginEnd sapUiSmallMarginTop">
+            <HBox id="kpiNumbers" alignItems="Center">
+                <layout:VerticalLayout id="_IDGenVerticalLayout" class="sapUiLargeMarginEnd">
+                    <Label id="_IDGenLabel19" text="TOTAL REQUESTS" design="Bold" />
+                    <Title id="_IDGenTitle13" text="{requestAnalytics>/totalCount}" titleStyle="H1" class="sapUiTinyMarginTop" />
+                </layout:VerticalLayout>
+
+                <layout:VerticalLayout id="_IDGenVerticalLayout5" >
+                    <Label id="_IDGenLabel20" text="PENDING APPROVAL" design="Bold" />
+                    <Title id="_IDGenTitle14" text="{requestAnalytics>/pendingCount}" titleStyle="H1" class="sapUiTinyMarginTop"  />
+                </layout:VerticalLayout>
+            </HBox>
+
+            <HBox id="kpiCharts" alignItems="Center">
+                <viz:VizFrame id="idStatusDonut" vizType="donut" height="140px" width="200px"
+                    vizProperties="{ 'plotArea': { 'dataLabel': { 'visible': false } }, 'title': { 'text': 'By Status', 'visible': true }, 'legend': { 'visible': false } }">
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset id="_IDGenFlattenedDataset3" data="{requestAnalytics>/statusData}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition id="_IDGenDimensionDefinition2" name="Status" value="{requestAnalytics>status}" />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition id="_IDGenMeasureDefinition1" name="Quantity" value="{requestAnalytics>count}" />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+                    <viz:feeds>
+                        <viz.feeds:FeedItem id="_IDGenFeedItem3" uid="size" type="Measure" values="Quantity" />
+                        <viz.feeds:FeedItem id="_IDGenFeedItem4" uid="color" type="Dimension" values="Status" />
+                    </viz:feeds>
+                </viz:VizFrame>
+
+                <viz:VizFrame id="idTypeDonut" vizType="donut" height="140px" width="200px"
+                    vizProperties="{ 'plotArea': { 'dataLabel': { 'visible': false } }, 'title': { 'text': 'By Type', 'visible': true }, 'legend': { 'visible': false } }">
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset id="_IDGenFlattenedDataset4" data="{requestAnalytics>/typeData}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition id="_IDGenDimensionDefinition3" name="Type" value="{requestAnalytics>type}" />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition id="_IDGenMeasureDefinition4" name="Quantity" value="{requestAnalytics>count}" />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+                    <viz:feeds>
+                        <viz.feeds:FeedItem id="_IDGenFeedItem5" uid="size" type="Measure" values="Quantity" />
+                        <viz.feeds:FeedItem id="_IDGenFeedItem6" uid="color" type="Dimension" values="Type" />
+                    </viz:feeds>
+                </viz:VizFrame>
+            </HBox>
+        </HBox>
+            </fb:FilterBar>
+
+            <Table id="requestTable" items="{path: '/Requests', sorter: { path: 'createdAt', descending: false }}" sticky="ColumnHeaders" mode="None">
+                <columns>
+                    <Column id="_IDGenColumn16"><Text id="_IDGenText21" text="Request ID" /></Column>
+                    <Column id="_IDGenColumn16a"><Text id="_IDGenText21a" text="Type" /></Column>
+                    <Column id="_IDGenColumn17"><Text id="_IDGenText22" text="User" /></Column>
+                    <Column id="_IDGenColumn18"><Text id="_IDGenText23" text="Reason" /></Column>
+                    <Column id="_IDGenColumn18a"><Text id="_IDGenText23a" text="Request Date" /></Column>
+                    <Column id="_IDGenColumn19" hAlign="End"><Text id="_IDGenText24" text="Status" /></Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem7" type="Navigation" press=".onNavToDetails">
+                        <cells>
+                            <ObjectIdentifier id="_IDGenObjectIdentifier2" title="{requestNo}" text="{type}" />
+                            <ObjectIdentifier id="_IDGenObjectIdentifier2a" text="{type}" />
+                            <Text id="_IDGenText25" text="{requestedBy/name}" />
+                            <Text id="_IDGenText26" text="{cause}" />
+                            <Text id="_IDGenText27a" text="{createdAt}" />
+                            <ObjectStatus id="_IDGenObjectStatus2" text="{status}" state="{= ${status} === 'APPROVED' ? 'Success' : 'Warning' }" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

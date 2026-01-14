@@ -1,0 +1,6 @@
+.centralPercentage {
+    position: absolute;
+    pointer-events: none; /* Let user click the chart behind the text */
+    font-weight: bold;
+    color: #333;
+}

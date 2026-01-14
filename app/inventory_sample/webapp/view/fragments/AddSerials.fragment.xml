@@ -1,0 +1,33 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="addSerialsDialog" title="Add Assets to {name}" contentWidth="400px">
+        <content>
+            <Table id="newSerialsTable1" items="{bulk>/newSerials}">
+                <headerToolbar>
+                    <OverflowToolbar id="_IDGenOverflowToolbar2">
+                        <Title id="_IDGenTitle4" text="New Serial Numbers"/>
+                        <ToolbarSpacer id="_IDGenToolbarSpacer3"/>
+                        <Button id="_IDGenButton5" icon="sap-icon://add" text="Add Row" press=".onAddSerialRow"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column id="_IDGenColumn13"><Text id="_IDGenText17" text="Serial Code"/></Column>
+                    <Column id="_IDGenColumn14" width="50px"/>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem5">
+                        <cells>
+                            <Input id="_IDGenInput1" value="{bulk>code}" placeholder="Enter Code..."/>
+                            <Button id="_IDGenButton6" icon="sap-icon://delete" type="Transparent" press=".onDeleteSerialRow"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <beginButton>
+            <Button id="_IDGenButton9" text="Add All" type="Accept" press=".onSaveNewSerials"/>
+        </beginButton>
+        <endButton>
+            <Button id="_IDGenButton13" text="Cancel" press=".onCloseSerialsDialog"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

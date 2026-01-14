@@ -1,0 +1,34 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <ResponsivePopover id="_IDGenResponsivePopover" 
+        title="Asset Valuation Breakdown" 
+        contentWidth="450px"
+        placement="Bottom"
+        horizontalScrolling="true">
+        <content>
+            <Table id="valuationBreakdownTable" items="{/DashboardCards}" noDataText="No category data available">
+                <columns>
+                    <Column id="_IDGenColumn42" width="auto">
+                        <Text id="_IDGenText76" text="Category" />
+                    </Column>
+                    <Column id="_IDGenColumn43" hAlign="End" width="100px">
+                        <Text id="_IDGenText77" text="Total Units" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem16">
+                        <cells>
+                            <VBox id="_IDGenVBox8">
+                                <Title id="_IDGenTitle7" text="{unit_type}" titleStyle="H6" wrapping="true" />
+                                <Text id="_IDGenText78" text="Asset Group" styleClass="sapUiGreyText" />
+                            </VBox>
+                            <ObjectNumber id="_IDGenObjectNumber2" 
+                                number="{total_count}" 
+                                unit="Units" 
+                                state="Information" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </ResponsivePopover>
+</core:FragmentDefinition>

@@ -1,0 +1,137 @@
+<mvc:View controllerName="inventorysample.controller.LogList" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:fb="sap.ui.comp.filterbar">
+    <Page id="_IDGenPagea"  title="System Logs" showNavButton="true" navButtonPress=".onNavBack">
+        <content>
+            <fb:FilterBar id="logFilterBar" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemLog" name="Product" label="Product ID" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterLogProduct_ID" items="{
+												path: '/Products',
+												templateShareable: true
+											}">
+                                <items>
+                                    <core:Item id="_IDGenItemaALog" xmlns:core="sap.ui.core" key="{code}" text="{code}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemLog2" name="Product_cat" label="Category" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterLogProduct_category" items="{
+												path: '/DashboardCards',
+												templateShareable: true
+											}">
+                                <items>
+                                    <core:Item id="_IDGenItemaALog2" xmlns:core="sap.ui.core" key="{unit_type}" text="{unit_type}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemLog1" name="Product_model" label="Model" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterLogProduct_model" items="{
+												path: '/ModelNames',
+												templateShareable: true
+											}">
+        
+                                <items>
+                                    <core:Item id="_IDGenItemaALog1" xmlns:core="sap.ui.core" key="{name}" text="{name}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemLog3" name="Product_approver" label="Approver" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterLogProduct_approver" items="{
+												path: '/Users',
+                                                filters: [{path: 'role', operator: 'EQ', value1: 'admin'}],
+												templateShareable: true
+											}">
+        
+                                <items>
+                                    <core:Item id="_IDGenItemaALog3" xmlns:core="sap.ui.core" key="{ID}" text="{name}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemLog3a" name="Product_requester" label="Requester" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterLogProduct_requester" items="{
+												path: '/Users',
+                                                
+												templateShareable: true
+											}">
+        
+                                <items>
+                                    <core:Item id="_IDGenItemaALog3a" xmlns:core="sap.ui.core" key="{ID}" text="{name}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemLog3aa" name="Product_action" label="Action" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterLogProduct_action">
+        
+                                <items>
+                                    <core:Item id="_IDGenItemaa" xmlns:core="sap.ui.core" key="CHECKED_OUT" text="CHECKED_OUT" />
+                                    <core:Item id="_IDGenItem1aa" xmlns:core="sap.ui.core" key="CHECKED_IN" text="CHECKED_IN" />
+                                    <core:Item id="_IDGenItem2raa" xmlns:core="sap.ui.core" key="RESTOCKED" text="RESTOCKED" />
+                                    <core:Item id="_IDGenItem2raaA" xmlns:core="sap.ui.core" key="REJECTED" text="REJECTED" />
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem2bLog" name="Request ID" label="Request ID" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterLogRequestNo" items="{
+												path: '/Requests',
+												templateShareable: true
+											}">
+        
+                                <items>
+                                    <core:Item id="_IDGenItembLog" xmlns:core="sap.ui.core" key="{requestNo}" text="{requestNo}" />
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem2cLog" name="Date" label="Date Range" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <DateRangeSelection 
+                                id="filterLogDateRange" 
+                                displayFormat="yyyy-MM-dd" 
+                                change=".onFilterChange" />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    
+                </fb:filterGroupItems>
+            </fb:FilterBar>
+
+            <Table id="logTable" items="{path: '/Logs', sorter: {path: 'timestamp', descending: false}}" sticky="ColumnHeaders" mode="None">
+                <columns>
+                    <Column id="_IDGenColumn24" ><Text id="_IDGenText40" text="Product" /></Column>
+                    <Column id="_IDGenColumn25" ><Text id="_IDGenText41" text="Requested By" /></Column>
+                    <Column id="_IDGenColumn26" ><Text id="_IDGenText42" text="Approved By" /></Column>
+                    <Column id="_IDGenColumn32"  ><Text id="_IDGenText46" text=" Action" /></Column>
+                    <Column id="_IDGenColumn33"  ><Text id="_IDGenText53" text=" Performed On" /></Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem9">
+                        <cells>
+                            <ObjectIdentifier id="_IDGenObjectIdentifier3" title="{product/details/name}" text="{product/code}" />
+                            <Text id="_IDGenText44" text="{request/requestedBy/name}" />
+                            <Text id="_IDGenText45" text="{performedBy/name}" />
+                            <Text id="_IDGenText54" text="{action}" />
+                            <Text id="_IDGenText55" text="{timestamp}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </Page>
+</mvc:View>

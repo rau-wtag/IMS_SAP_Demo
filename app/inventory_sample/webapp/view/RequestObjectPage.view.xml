@@ -1,0 +1,80 @@
+<mvc:View controllerName="inventorysample.controller.RequestObjectPage" 
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns:m="sap.m" 
+    xmlns:f="sap.ui.layout.form" 
+    xmlns:mc="sap.suite.ui.microchart"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:layout="sap.ui.layout"
+    >
+    <m:Page id="_IDGenPage1" title="Review Request" showNavButton="true" navButtonPress=".onNavBack">
+        <m:headerContent>
+            <m:ObjectStatus id="_IDGenObjectStatus3" text="{status}" state="{= ${status} === 'APPROVED' ? 'Success' : 'Warning'}" />
+        </m:headerContent>
+
+        <m:content>
+            <m:VBox id="_IDGenVBox4" class="sapUiSmallMargin">
+                <m:HBox id="_IDGenHBox2" justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+                    <m:VBox id="_IDGenVBox9">
+                        <m:Title id="_IDGenTitle8" text="Request No: {requestNo}" titleStyle="H2" />
+                        <m:Text id="_IDGenText8" text="Requester: {requestedBy/name}" class="sapUiTinyMarginTop" />
+                        <m:ObjectMarker id="_IDGenObjectMarker" type="Flagged" visible="{= ${type} === 'repair'}" class="sapUiTinyMarginTop" />
+                    </m:VBox>
+                </m:HBox> 
+
+                <m:VBox id="_IDGenVBox10" alignItems="Center">
+                        <m:Label id="_IDGenLabel13" text="Decision Progress" design="Bold" />
+                        <mc:InteractiveDonutChart id="decisionChart" displayedSegments="3" selectionChanged=".onChartSelectionChanged">
+                            <mc:segments>
+                                <mc:InteractiveDonutChartSegment id="_IDGenInteractiveDonutChartSegment" label="Approved" value="{chartModel>/approved}" color="Good" />
+                                <mc:InteractiveDonutChartSegment id="_IDGenInteractiveDonutChartSegment1" label="Rejected" value="{chartModel>/rejected}" color="Error" />
+                                <mc:InteractiveDonutChartSegment id="_IDGenInteractiveDonutChartSegment2" label="Pending" value="{chartModel>/pending}" color="Critical" />
+                            </mc:segments>
+                        </mc:InteractiveDonutChart>
+                </m:VBox>
+        
+
+                <f:SimpleForm id="_IDGenSimpleForm3" editable="false" layout="ResponsiveGridLayout">
+                    <m:Label id="_IDGenLabel14" text="Request Type" /> <m:Text id="_IDGenText27" text="{type}" />
+                    <m:Label id="_IDGenLabel16" text="Reason" /> <m:Text id="_IDGenText28" text="{cause}" />
+                </f:SimpleForm>
+            </m:VBox>
+
+            <m:Table id="adminItemsTable" items="{path: 'items', parameters: {$expand: 'product($expand=details)'}}" class="sapUiResponsiveMargin" width="auto">
+                <m:headerToolbar>
+                    <m:OverflowToolbar id="_IDGenOverflowToolbar5">
+                        <m:Title id="_IDGenTitle10" text="Requested Products" />
+                    </m:OverflowToolbar>
+                </m:headerToolbar>
+                <m:columns>
+                    <m:Column id="_IDGenColumn20"><m:Text id="_IDGenText29" text="Asset Info" /></m:Column>
+                    <m:Column id="_IDGenColumn21" minScreenWidth="Tablet" demandPopin="true"><m:Text id="_IDGenText30" text="Status" /></m:Column>
+                    <m:Column id="_IDGenColumn22" hAlign="End" visible="{security>/isAdmin}"><m:Text id="_IDGenText31" text="Actions" /></m:Column>
+                </m:columns>
+                <m:items>
+                    <m:ColumnListItem id="_IDGenColumnListItem8">
+                        <m:cells>
+                            <m:VBox id="_IDGenVBox11">
+                                <m:Text id="_IDGenText32" text="{product/details/name}" />
+                                <m:Text id="_IDGenText33" text="{product/code}"/>
+                            </m:VBox>
+                            <m:ObjectStatus id="_IDGenObjectStatus4" text="{status}" state="{= ${status} === 'APPROVED' ? 'Success' : (${status} === 'REJECTED' ? 'Error' : 'None') }" />
+                            <m:HBox id="_IDGenHBox3" justifyContent="End">
+                                <m:Button id="_IDGenButton" icon="sap-icon://accept" type="Accept" press=".onApproveItem" class="sapUiTinyMarginEnd" enabled="{= ${status} === 'PENDING'}"/>
+                                <m:Button id="_IDGenButton26" icon="sap-icon://decline" type="Reject" press=".onRejectItem" enabled="{= ${status} === 'PENDING'}"/>
+                            </m:HBox>
+                        </m:cells>
+                    </m:ColumnListItem>
+                </m:items>
+            </m:Table>
+        </m:content>
+
+        <m:footer>
+            <m:OverflowToolbar id="_IDGenOverflowToolbar6">
+                <m:ToolbarSpacer id="_IDGenToolbarSpacer1" />
+                <m:Button id="_IDGenButton27" text="Finalize &amp; Sync" type="Emphasized" press=".onConfirmFinalDecision" visible="{security>/isAdmin}" icon="sap-icon://save" />
+            </m:OverflowToolbar>
+        </m:footer>
+    </m:Page>
+</mvc:View>

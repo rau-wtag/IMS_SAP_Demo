@@ -1,0 +1,26 @@
+<mvc:View controllerName="inventorysample.controller.Login" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" xmlns:layout="sap.ui.layout">
+    <Shell id="shell">
+        <App id="app1">
+            <Page id="loginPage" showHeader="false">
+                <content>
+                    <VBox id="_IDGenVBox1" justifyContent="Center" alignItems="Center" class="sapUiLargeMarginTop">
+                        <f:Card id="_IDGenCard" width="350px" class="sapUiMediumMargin">
+                            <f:header>
+                                <card:Header id="_IDGenHeader" xmlns:card="sap.f.cards" title="Inventory Login" subtitle="Enter your credentials" iconSrc="sap-icon://customer-and-contacts"/>
+                            </f:header>
+                            <f:content>
+                                <VBox id="_IDGenVBox2" class="sapUiSmallMargin">
+                                    <Label id="_IDGenLabel" text="Email"/>
+                                    <Input id="emailInput" type="Email" placeholder="admin@sample.com"/>
+                                    <Label id="_IDGenLabel1" text="Password"/>
+                                    <Input id="passwordInput" type="Password"/>
+                                    <Button id="_IDGenButton1" text="Login" type="Emphasized" press=".onLogin" width="100%" class="sapUiSmallMarginTop"/>
+                                </VBox>
+                            </f:content>
+                        </f:Card>
+                    </VBox>
+                </content>
+            </Page>
+        </App>
+    </Shell>
+</mvc:View>
