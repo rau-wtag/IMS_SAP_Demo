@@ -2,7 +2,7 @@ const cds = require('@sap/cds');
 const { UPDATE, INSERT } = require('@sap/cds/lib/ql/cds-ql');
 
 module.exports = cds.service.impl(async function() {
-    const { Details, Products, RequestItems, Requests, Logs } = this.entities;
+    const { Details, Products, RequestItems, Requests, Logs, Users } = this.entities;
 
     // this.before(['CREATE', 'UPDATE', 'DELETE'], [Details, Products], async (req) => {
     
@@ -12,6 +12,24 @@ module.exports = cds.service.impl(async function() {
     //         req.error(403, "Forbidden: Only administrators can modify inventory data.");
     //     }
     // });
+    this.on('getUserInfo', async (req) => {
+
+        const loginEmail = req.user.id;
+
+        const userProfile = await SELECT.one.from(Users).where({email: loginEmail});
+
+        if (!userProfile) {
+            return JSON.stringify({ error: "User not found in database" });
+        }
+
+        return JSON.stringify({
+            email: userProfile.email,
+            name: userProfile.name,
+            id: userProfile.ID,
+            isAdmin: req.user.is('Admin_Role'),
+            isEmployee: req.user.is('Employee_Role')
+        });
+    });
 
     this.after('CREATE', 'RequestItems', async (data) => {
         await UPDATE(Products).set({ status: 'requested' }).where({ ID: data.product_ID });

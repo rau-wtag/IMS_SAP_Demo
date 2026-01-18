@@ -29,6 +29,23 @@
 					"odataVersion": "4.0"
 				}
 			}
+		},
+		"crossNavigation": {
+			"inbounds": {
+				"Inventory-manage": {
+					"semanticObject": "Inventory",
+					"action": "manage",
+					"title": "Manage Inventory",
+					"signature": {
+						"parameters": {
+							"unit_type": {
+								"required": false
+							}
+						},
+						"additionalParameters": "allowed"
+					}
+				}
+			}
 		}
 	},
 	"sap.ui": {

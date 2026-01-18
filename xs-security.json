@@ -1,7 +1,34 @@
 {
-  "scopes": [],
+  "xsappname": "sample-inventory-app",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Admin",
+      "description": "Admin Scope"
+    },
+    {
+      "name":"$XSAPPNAME.Employee",
+      "description":"Employee scope"
+    }
+  ],
   "attributes": [],
-  "role-templates": [],
+  "role-templates": [
+    {
+      "name": "Admin_Role",
+      "description": "Admin role",
+      "scope-references": [
+        "$XSAPPNAME.Admin"
+      ]
+    },
+    {
+      "name":"Employee_Role",
+      "description":"Employee role",
+      "scope-references":[
+        "$XSAPPNAME.Employee"
+      ]
+    }
+  ],
+  "authorities-inheritance": false,
   "oauth2-configuration": {
     "redirect-uris": [
       "https://*.us10-001.hana.ondemand.com/**",

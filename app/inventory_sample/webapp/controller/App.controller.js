@@ -12,6 +12,7 @@ sap.ui.define([
         isLoggedIn: false
       });
       this.getView().setModel(oLoginModel, "isLogin");
+      
 
       var oRouter = this.getOwnerComponent().getRouter();
       oRouter.attachRouteMatched(this._onRouteMatched, this);
@@ -127,14 +128,40 @@ sap.ui.define([
     },
 
     onLogout: function () {
-      var oSecurityModel = this.getOwnerComponent().getModel("security");
-      oSecurityModel.setProperty("/user", "");
-      oSecurityModel.setProperty("/role", "");
-      oSecurityModel.setProperty("/isAdmin", false);
-      oSecurityModel.setProperty("/ID", "");
-      oSecurityModel.setProperty("/name", "");
-      //this.getOwnerComponent().getModel("isLogin").setProperty("/isLoggedIn", false);
-      this.getOwnerComponent().getRouter().navTo("Login");
-    }
+      // var oSecurityModel = this.getOwnerComponent().getModel("security");
+      // oSecurityModel.setProperty("/user", "");
+      // oSecurityModel.setProperty("/role", "");
+      // oSecurityModel.setProperty("/isAdmin", false);
+      // oSecurityModel.setProperty("/ID", "");
+      // oSecurityModel.setProperty("/name", "");
+      // //this.getOwnerComponent().getModel("isLogin").setProperty("/isLoggedIn", false);
+      // this.getOwnerComponent().getRouter().navTo("Login");
+
+        var sUrl = window.location.origin + "/odata/v4/catalog/";
+    
+    // 1. Create a request to a PROTECTED backend URL
+        var oRequest = new XMLHttpRequest();
+
+        // 2. THE SECRET: Send WRONG credentials ('logout':'logout') 
+        // This overwrites the browser's saved 'admin@test.com'
+        oRequest.open("GET", sUrl, true, "logout", "logout"); 
+        oRequest.send();
+
+        oRequest.onreadystatechange = function() {
+            if (oRequest.readyState === 4) {
+                // 3. Clear the local security model
+                this.getOwnerComponent().getModel("security").setData({
+                    isAdmin: false,
+                    isLoggedIn: false,
+                    user: ""
+                });
+              
+                window.location.href = window.location.origin + "/index.html#/Login";
+                console.log(window.location.href)
+                console.log(this.getOwnerComponent().getModel("security").getData())
+                window.location.reload(); 
+            }
+        }.bind(this);
+      }
   });
 });

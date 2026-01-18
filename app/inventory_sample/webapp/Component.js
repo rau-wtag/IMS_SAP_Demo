@@ -21,10 +21,25 @@ sap.ui.define([
             this.setModel(models.createDeviceModel(), "device");
 
             var sSavedUser = localStorage.getItem("inventoryUser");
-            var oUserData = sSavedUser ? JSON.parse(sSavedUser) : { isAdmin: false, user: "", role: "", ID: "", name:"" };
+            var oUserData = sSavedUser ? JSON.parse(sSavedUser) : { isAdmin: false, isEmployee: false, user: "", ID: "", name:"" };
 
             var oSecurityModel = new JSONModel(oUserData);
             this.setModel(oSecurityModel, "security");
+
+            $.get("/odata/v4/catalog/getUserInfo()").done(function(data) {
+                var oData = JSON.parse(data.value);
+                oSecurityModel.setData({
+                        isAdmin: oData.isAdmin,
+                        isEmployee: oData.isEmployee,
+                        user: oData.email,     
+                        ID: oData.id,      
+                        name: oData.name
+                    });
+                }.bind(this))
+                .fail(function() {
+                    // If the backend says "Unauthorized", send them to Login
+                    this.getRouter().navTo("Login");
+                }.bind(this));
 
             var oCartModel = new JSONModel({
                 items: [],
@@ -34,6 +49,8 @@ sap.ui.define([
 
             // enable routing
             this.getRouter().initialize();
+
+            
         }
     });
 });

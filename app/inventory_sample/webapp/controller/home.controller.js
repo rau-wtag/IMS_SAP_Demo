@@ -17,6 +17,9 @@ sap.ui.define([
                 totalRepairCost: 0,
                 totalEvalCost: 0
             });
+            var secModel = this.getOwnerComponent().getModel("security");
+            console.log("here i am:")
+            console.log(secModel.getData())
             this.getView().setModel(oUiModel, "ui");
             var oVizFrame = this.byId("idVizFramePie");
             var oVizFrame1 = this.byId("idVizFramePie1")

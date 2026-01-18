@@ -1,7 +1,8 @@
 using my.inventory as my from '../db/schema';
 
-service CatalogService {
+service CatalogService @(requires:'authenticated-user') {
     entity Users as projection on my.Users;
+    function getUserInfo() returns String;
     
     @readonly entity DashboardCards as projection on my.DashboardCards;
     @readonly entity StockAlerts as projection on my.StockAlerts;
@@ -13,11 +14,17 @@ service CatalogService {
     @readonly entity RepairCount as projection on my.RepairCount;
     @readonly entity StatusAnalytics as projection on my.StatusAnalytics;
     @readonly entity CategoryDistribution as projection on my.CategoryDistribution;
-    @cds.redirection.target entity Products as projection on my.Products actions {
-        action setRepairStatus();
-        action setAvailableStatus();
-    };
-    
+    @cds.redirection.target entity Products as projection on my.Products;
+    annotate Products with @(restrict: [
+        {
+            grant: ['*'],
+            to   : 'Admin_Role'
+        },
+        {
+            grant: ['READ'],
+            to   : 'Employee_Role'
+        }
+    ]);
     @readonly entity WeeklyActivity as projection on my.WeeklyActivity;
     @readonly entity PendingRequests as projection on my.PendingRequests;
     @cds.redirection.target entity Requests as projection on my.Requests;
