@@ -12,6 +12,13 @@ module.exports = cds.service.impl(async function() {
     //         req.error(403, "Forbidden: Only administrators can modify inventory data.");
     //     }
     // });
+
+    this.before('*', req => {
+    console.log('>>> Method:', req.method);
+    console.log('>>> User:', req.user.id);
+    console.log('>>> Roles:', req.user.roles);
+    // If req.user.id is 'anonymous', the token is NOT reaching CAP.
+    });     
     this.on('getUserInfo', async (req) => {
 
         const loginEmail = req.user.id;

@@ -27,6 +27,10 @@ mta_archives/
 *.iml
 *.flattened-pom.xml
 
+db.sqlite-shm
+db.sqlite-wal
+package-lock.json
+
 # IDEs
 # .vscode
 # .idea

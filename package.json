@@ -68,7 +68,7 @@
         "schema_evolution": "auto"
       },
       "[production]": {
-        "auth": "mocked",
+        "auth": "xsuaa",
         "db": {
           "kind": "hana"
         },
