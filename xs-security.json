@@ -3,14 +3,6 @@
   "tenant-mode": "dedicated",
   "scopes": [
     {
-      "name": "$XSAPPNAME.Admin",
-      "description": "Admin Scope"
-    },
-    {
-      "name": "$XSAPPNAME.Employee",
-      "description": "Employee scope"
-    },
-    {
       "name": "$XSAPPNAME.Admin_Role",
       "description": "Admin_Role"
     },
@@ -25,14 +17,14 @@
       "name": "Admin_Role",
       "description": "Admin role",
       "scope-references": [
-        "$XSAPPNAME.Admin"
+        "$XSAPPNAME.Admin_Role"
       ]
     },
     {
       "name": "Employee_Role",
       "description": "Employee role",
       "scope-references": [
-        "$XSAPPNAME.Employee"
+        "$XSAPPNAME.Employee_Role"
       ]
     }
   ],

@@ -10,6 +10,11 @@
       "target": "$1",
       "destination": "srv-api",
       "csrfProtection": true
+    },
+    {
+      "source": "^/(.*)$",
+      "localDir": "../inventory_sample/webapp",
+      "authenticationType": "xsuaa"
     }
   ]
 }

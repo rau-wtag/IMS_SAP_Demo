@@ -26,38 +26,10 @@
   "cds": {
     "requires": {
       "auth": {
-        "[development]": {
-          "strategy": "mock",
-          "users": {
-            "ramisa@example.com": {
-              "password": "123",
-              "roles": [
-                "Admin_Role", 
-                "authenticated-user"
-              ]
-            },
-            "orpa@example.com": {
-              "password": "123",
-              "roles": [
-                "Employee_Role",
-                "authenticated-user"
-              ]
-            },
-            "huma@example.com": {
-              "password": "123",
-              "roles": [
-                "Employee_Role",
-                "authenticated-user"
-              ]
-            },
-            "raiyan@example.com": {
-              "password": "123",
-              "roles": [
-              
-              ]
-            },
-            "*": false
-          }
+        "kind": "xsuaa",
+        "roles": {
+          "Admin_Role": ["Admin_Role", "$XSAPPNAME.Admin_Role"],
+          "Employee_Role": ["Employee_Role", "$XSAPPNAME.Employee_Role"]
         }
       },
       "db": {
