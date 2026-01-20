@@ -155,11 +155,11 @@ sap.ui.define([
                     isLoggedIn: false,
                     user: ""
                 });
-              
-                window.location.href = window.location.origin + "/index.html#/Login";
+                
+                window.location.href = "/app-logout";
                 console.log(window.location.href)
                 console.log(this.getOwnerComponent().getModel("security").getData())
-                window.location.reload(); 
+                //window.location.reload(); 
             }
         }.bind(this);
       }
