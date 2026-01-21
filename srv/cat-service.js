@@ -14,10 +14,10 @@ module.exports = cds.service.impl(async function() {
     // });
 
     this.before('*', req => {
-    console.log('>>> Method:', req.method);
-    console.log('>>> User:', req.user.id);
-    console.log('>>> Roles:', req.user.roles);
-    // If req.user.id is 'anonymous', the token is NOT reaching CAP.
+        console.log('>>> Method:', req.method);
+        console.log('>>> User:', req.user.id);
+        console.log('>>> Roles:', req.user.roles);
+    
     });     
     this.on('getUserInfo', async (req) => {
 
