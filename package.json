@@ -4,6 +4,8 @@
   "description": "A simple CAP project.",
   "dependencies": {
     "@cap-js/hana": "^2",
+    "@sap-cloud-sdk/connectivity": "^4.3.1",
+    "@sap-cloud-sdk/http-client": "^4.3.1",
     "@sap/cds": "^9",
     "@sap/xssec": "^4",
     "express": "^4"
@@ -21,15 +23,22 @@
     "undeploy": "cf undeploy sample --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-    "watch-inventory_list": "cds watch --open inventorylist/index.html?sap-ui-xx-viewCache=false --livereload false"
+    "watch-inventory_list": "cds watch --open inventorylist/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "watch-inventory_user_management": "cds watch --open inventoryusermanagement/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "cds": {
     "requires": {
       "auth": {
         "kind": "xsuaa",
         "roles": {
-          "Admin_Role": ["Admin_Role", "$XSAPPNAME.Admin_Role"],
-          "Employee_Role": ["Employee_Role", "$XSAPPNAME.Employee_Role"]
+          "Admin_Role": [
+            "Admin_Role",
+            "$XSAPPNAME.Admin_Role"
+          ],
+          "Employee_Role": [
+            "Employee_Role",
+            "$XSAPPNAME.Employee_Role"
+          ]
         }
       },
       "db": {
@@ -38,6 +47,12 @@
           "url": "db.sqlite"
         },
         "schema_evolution": "auto"
+      },
+      "xsuaa-api": {
+        "kind": "rest",
+        "credentials": {
+          "destination": "XSUAA-API"
+        }
       },
       "[production]": {
         "auth": "xsuaa",
@@ -55,6 +70,9 @@
     "app/*"
   ],
   "sapux": [
-    "app/inventory_list"
+    "app/inventory_list",
+    "app/project1",
+    "app/inventory_user_management",
+    "app/inventory_user_management"
   ]
 }

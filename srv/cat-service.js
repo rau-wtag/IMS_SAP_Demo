@@ -1,5 +1,6 @@
 const cds = require('@sap/cds');
 const { UPDATE, INSERT } = require('@sap/cds/lib/ql/cds-ql');
+const { executeHttpRequest } = require('@sap-cloud-sdk/http-client');
 
 module.exports = cds.service.impl(async function() {
     const { Details, Products, RequestItems, Requests, Logs, Users } = this.entities;
@@ -13,10 +14,29 @@ module.exports = cds.service.impl(async function() {
     //     }
     // });
 
-    this.before('*', req => {
+    this.before('*', async (req) => {
         console.log('>>> Method:', req.method);
         console.log('>>> User:', req.user.id);
         console.log('>>> Roles:', req.user.roles);
+
+        try {
+            // This automatically looks up the 'XSUAA-API' destination 
+            // and handles the OAuth token fetch for you.
+            const response = await executeHttpRequest(
+                { destinationName: 'XSUAA-API' },
+                {
+                    method: 'GET',
+                    url: '/Users' // SCIM Endpoint for Users
+                }
+            );
+
+            console.log(response.data.resources)
+
+            return response.data.resources; // The list of users
+        } catch (error) {
+            console.error("Error fetching users:", error.message);
+            req.error(500, "Could not fetch users from BTP");
+        }
     
     });     
     this.on('getUserInfo', async (req) => {

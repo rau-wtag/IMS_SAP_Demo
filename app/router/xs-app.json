@@ -15,6 +15,11 @@
       "source": "^/(.*)$",
       "localDir": "../inventory_sample/webapp",
       "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^/(.*)$",
+      "localDir": "../inventory_user_management/webapp",
+      "authenticationType": "xsuaa"
     }
   ]
 }

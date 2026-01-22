@@ -86,10 +86,10 @@ view ProductStockReport as select from Details {
 
 view Possessions as select from Logs {
     key ID, 
-    product, 
-    request,
-    performedBy,
-    product.currentPossession as user,
+    product.ID as productID, 
+    request.ID as requestID,
+    performedBy.name as performedBy,
+    product.currentPossession.ID as user,
     timestamp as assignedAt,
 };
 
@@ -143,7 +143,7 @@ view MaintenanceAlerts as select from RequestItems {
     product.code as productCode, 
     product.details.name as modelName,
     product.details.unit_price * 0.7 AS estRepairCost : Decimal(10,3),
-    parent.requestedBy as reportedBy
+    parent.requestedBy.name as reportedBy
 } where parent.type = 'repair' and status = 'PENDING';
 
 view UserNmaes as select from Users {
