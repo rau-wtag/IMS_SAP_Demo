@@ -14,34 +14,39 @@ module.exports = cds.service.impl(async function() {
     //     }
     // });
 
-    this.before('*', async (req) => {
+    // this.before('*', async (req) => {
+    //     console.log('>>> Method:', req.method);
+    //     console.log('>>> User:', req.user.id);
+    //     console.log('>>> Roles:', req.user.roles);
+    //     console.log('>>> All data available:', req.user)
+
+    //     try {
+    //         // This automatically looks up the 'XSUAA-API' destination 
+    //         // and handles the OAuth token fetch for you.
+    //         const response = await executeHttpRequest(
+    //             { destinationName: 'XSUAA-API' },
+    //             {
+    //                 method: 'GET',
+    //                 url: '/Users' // SCIM Endpoint for Users
+    //             }
+    //         );
+
+    //         //console.log(response.data.resources)
+
+    //         return response.data.resources; // The list of users
+    //     } catch (error) {
+    //         console.error("Error fetching users:", error.message);
+    //         req.error(500, "Could not fetch users from BTP");
+    //     }
+    
+    // });     
+    this.on('getUserInfo', async (req) => {
         console.log('>>> Method:', req.method);
         console.log('>>> User:', req.user.id);
         console.log('>>> Roles:', req.user.roles);
 
-        try {
-            // This automatically looks up the 'XSUAA-API' destination 
-            // and handles the OAuth token fetch for you.
-            const response = await executeHttpRequest(
-                { destinationName: 'XSUAA-API' },
-                {
-                    method: 'GET',
-                    url: '/Users' // SCIM Endpoint for Users
-                }
-            );
-
-            console.log(response.data.resources)
-
-            return response.data.resources; // The list of users
-        } catch (error) {
-            console.error("Error fetching users:", error.message);
-            req.error(500, "Could not fetch users from BTP");
-        }
-    
-    });     
-    this.on('getUserInfo', async (req) => {
-
         const loginEmail = req.user.id;
+        const loginName = req.user.attr.givenName;
 
         const userProfile = await SELECT.one.from(Users).where({email: loginEmail});
 
@@ -50,9 +55,9 @@ module.exports = cds.service.impl(async function() {
         }
 
         return JSON.stringify({
-            email: userProfile.email,
-            name: userProfile.name,
-            id: userProfile.ID,
+            email: loginEmail,
+            name: loginName,
+            id: loginEmail,
             isAdmin: req.user.is('Admin_Role'),
             isEmployee: req.user.is('Employee_Role')
         });

@@ -28,6 +28,13 @@ service CatalogService @(requires:'authenticated-user') {
     @readonly entity WeeklyActivity as projection on my.WeeklyActivity;
     @readonly entity PendingRequests as projection on my.PendingRequests;
     @cds.redirection.target entity Requests as projection on my.Requests;
+    annotate Requests with @(restrict: [
+        // Rule: A user can read/write ONLY if 'createdBy' matches their ID
+        { grant: ['*'], to: 'authenticated-user', where: 'createdBy = $user' },
+        
+        // Rule: Admins can see/edit EVERYTHING (ignoring the 'where' clause)
+        { grant: ['*'], to: 'Admin_Role' }
+    ]);
 
     @readonly entity MaintenanceAlerts as projection on my.MaintenanceAlerts;
     @cds.redirection.target entity RequestItems as projection on my.RequestItems;

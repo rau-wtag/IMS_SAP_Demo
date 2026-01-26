@@ -22,7 +22,7 @@ entity Products : cuid, managed {
     requests            : Association to RequestItems on requests.product = $self;
 }
 
-entity Users : cuid, managed {
+entity Users : cuid {
     key ID          : UUID;
     name            : String @title: 'Name';
     email           : String @title: 'Email';
@@ -71,7 +71,7 @@ entity Logs : cuid, managed {
 
 view DashboardCards as select from Details {
     key unit_type,
-    unit_price,
+    avg(unit_price) as avg_price : Decimal,
     count(items.ID) as total_count : Integer,  
     
 } group by unit_type;
@@ -113,13 +113,13 @@ view RepairCount as select from Products {
 } where status = 'repair';
 
 view StatusAnalytics as select from Products {
-    key ID,
-    case 
+    key ID, 
+    key case 
         when (currentPossession.ID is not null and status is null) then 'In Use'
         else status
     end as status : String,
     count(ID) as count : Integer
-} group by status;
+} group by status,ID,currentPossession.ID;
 
 view RecentRestocks as select from Logs {
     key ID,
@@ -127,7 +127,7 @@ view RecentRestocks as select from Logs {
     action,
     product.details.name as modelName,
     cast(timestamp as Timestamp) as timestamp
-} where action = 'RESTOCKED' or action = 'CHECKED_IN' and createdAt >= datetime('now', '-7 days');
+} where action = 'RESTOCKED' or action = 'CHECKED_IN' and createdAt >= add_days(now(), -7);
 
 view WeeklyActivity as select from Requests {
     key ID,
@@ -136,7 +136,7 @@ view WeeklyActivity as select from Requests {
     status,
     requestedBy.name as requester,
     cast(createdAt as Timestamp) as createdAt
-} where createdAt >= datetime('now', '-7 days');
+} where createdAt >= add_days(now(), -7);
 
 view MaintenanceAlerts as select from RequestItems {
     key ID,
@@ -157,11 +157,10 @@ view PendingRequests as select from Requests {
 } where status = 'PENDING';
 
 view CategoryDistribution as select from Products {
-    key ID,
-    status,
-    details.unit_type,
-    count(ID) as amount : Integer
-} group by status,details.unit_type;
+    key status,
+    key details.unit_type,
+    count (ID) as amount : Integer
+} group by details.unit_type, status;
 
 view ModelNames as select from Details {
     key name

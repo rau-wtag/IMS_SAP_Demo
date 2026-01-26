@@ -1,4 +1,4 @@
-ID,name,email,role,createdAt,createdBy,modifiedAt,modifiedBy
+ID,name,email,role
 c2a12ec1-262b-4a3e-823d-226595a80ef4,Orpa,lamiya.orpa@welldev.io,admin
 e899e5de-a02b-45bf-b944-91535f2e15ea,Ramisa,ramisa.zaman@welldev.io,user
 
