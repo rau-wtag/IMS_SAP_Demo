@@ -128,15 +128,6 @@ sap.ui.define([
     },
 
     onLogout: function () {
-      // var oSecurityModel = this.getOwnerComponent().getModel("security");
-      // oSecurityModel.setProperty("/user", "");
-      // oSecurityModel.setProperty("/role", "");
-      // oSecurityModel.setProperty("/isAdmin", false);
-      // oSecurityModel.setProperty("/ID", "");
-      // oSecurityModel.setProperty("/name", "");
-      // //this.getOwnerComponent().getModel("isLogin").setProperty("/isLoggedIn", false);
-      // this.getOwnerComponent().getRouter().navTo("Login");
-
         var sUrl = window.location.origin + "/odata/v4/catalog/";
     
     // 1. Create a request to a PROTECTED backend URL
@@ -153,7 +144,11 @@ sap.ui.define([
                 this.getOwnerComponent().getModel("security").setData({
                     isAdmin: false,
                     isLoggedIn: false,
-                    user: ""
+                    user: "",
+                    name:"",
+                    ID:"",
+                    role:""
+                    
                 });
                 
                 window.location.href = "/app-logout";

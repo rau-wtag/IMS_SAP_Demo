@@ -4,7 +4,7 @@
             <Page id="loginPage" backgroundDesign="List">
         <VBox id="vb" justifyContent="Center" alignItems="Center" class="sapUiLargeMarginTop">
             <Title id="_IDGenTitle16" text="Inventory Management System" titleStyle="H1"/>
-            <Text id="_IDGenText71" text="Please log in using your corporate credentials." class="sapUiSmallMarginBottom"/>
+            <!-- <Text id="_IDGenText71" text="Please log in using your corporate credentials." class="sapUiSmallMarginBottom"/> -->
             <Button id="_IDGenButton1" text="Enter System" type="Emphasized" press=".onEnter" width="200px"/>
         </VBox>
     </Page>

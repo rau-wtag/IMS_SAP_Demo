@@ -18,18 +18,16 @@ entity Products : cuid, managed {
     status              : String enum { available; repair; lost; requested; } default 'available';
     details             : Association to Details;
     currentPossession   : Association to Users;
-    adminInCharge       : Association to Users;
     requests            : Association to RequestItems on requests.product = $self;
 }
 
-entity Users : cuid {
-    key ID          : UUID;
+entity Users {
+    key ID          : String;
     name            : String @title: 'Name';
     email           : String @title: 'Email';
     role            : String enum { user; admin };
     possessions     : Association to many Products on possessions.currentPossession = $self;
     performed       : Association to many Logs on performed.performedBy = $self;
-    added           : Association to many Products on added.adminInCharge = $self;
 }
 
 entity Requests : cuid, managed {

@@ -41,26 +41,61 @@ module.exports = cds.service.impl(async function() {
     
     // });     
     this.on('getUserInfo', async (req) => {
-        console.log('>>> Method:', req.method);
-        console.log('>>> User:', req.user.id);
-        console.log('>>> Roles:', req.user.roles);
+        try {
+            console.log('>>> Method:', req.method);
+            console.log('>>> User:', req.user.id);
+            console.log('>>> Roles:', req.user.roles);
 
-        const loginEmail = req.user.id;
-        const loginName = req.user.attr.givenName;
+            const userEmail = req.user.id;
+            const firstName = req.user.attr.givenName || "";
+            const lastName = req.user.attr.familyName || "";
+            const fullName = `${firstName} ${lastName}`.trim() || userEmail;
+            const bIsAdmin = req.user.is('Admin_Role');
+            const bIsEmployee = req.user.is('Employee_Role');
 
-        const userProfile = await SELECT.one.from(Users).where({email: loginEmail});
+            if (!bIsAdmin && !bIsEmployee) {
+                    return req.error(403, "Sorry, no roles have been assigned to you in BTP. You cannot enter.");
+            }
 
-        if (!userProfile) {
-            return JSON.stringify({ error: "User not found in database" });
+            const hanaRole = bIsAdmin ? 'admin' : 'user';
+
+            var userProfile = await SELECT.one.from(Users).where({email: userEmail});
+
+            if (!userProfile) {
+                console.log(`>>> User ${userEmail} not found. Auto-creating...`);
+
+                await INSERT.into(Users).entries({
+                    ID: userEmail,
+                    name: fullName,
+                    email: userEmail,
+                    role: hanaRole 
+                });
+                userProfile = { ID: newID, name: fullName, email: userEmail, role: hanaRole };
+            }
+
+            return {
+                    ID: userProfile.ID,
+                    name: userProfile.name,
+                    email: userProfile.email,
+                    role: userProfile.role,
+                    isAdmin: bIsAdmin,       
+                    isEmployee: bIsEmployee  
+                };
+        } catch (error) {
+            console.error("Error in getUserInfo:", error);
+            return req.error(500, "User validation failed");
         }
+    });
 
-        return JSON.stringify({
-            email: loginEmail,
-            name: loginName,
-            id: loginEmail,
-            isAdmin: req.user.is('Admin_Role'),
-            isEmployee: req.user.is('Employee_Role')
-        });
+    this.before('CREATE', 'Details', async (req) => {
+        const { name } = req.data;
+        if (!name) return req.error(400, "Product Name is required");
+        const existing = await SELECT.one.from('my.inventory.Details')
+            .where({ name: name });
+
+        if (existing) {
+            return req.error(409, `Product "${name}" already exists. Please use a unique name.`);
+        }
     });
 
     this.after('CREATE', 'RequestItems', async (data) => {
@@ -89,13 +124,17 @@ module.exports = cds.service.impl(async function() {
     this.after('CREATE', 'Products', async (data, req) => {
         const ID = data.ID;
         try {
+            if(!req.user.id)
+            {
+                console.error(`[ERROR] User ${req.user.id} not found/authenticated`, error)
+            }
             await INSERT.into(Logs).entries({
                 action: 'RESTOCKED',
                 product_ID: ID,
-                performedBy_ID: data.adminInCharge_ID,
+                performedBy_ID: req.user.id,
                 timestamp: new Date().toISOString()
             })
-            console.log(`[Log] Created Product ${ID} successfully`)
+            console.log(`[Log] Created Product ${ID} successfully by ${req.user.id}`)
         } catch (error) {
             console.error(`[ERROR] Failed to create product for product ${ID}: `, error);
         }

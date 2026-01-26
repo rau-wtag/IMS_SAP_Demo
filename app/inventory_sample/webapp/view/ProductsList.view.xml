@@ -3,8 +3,9 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:f="sap.f"
-    xmlns:fb="sap.ui.comp.filterbar">
-    <Page id="productPage" title="Products" showNavButton="true" navButtonPress=".onNavBack">
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core">
+    <Page id="productPage" title="Products" showNavButton="true" navButtonPress=".onNavBack" showFooter="true">
         <content>
             <fb:FilterBar id="filterbar" persistencyKey="PKey" useToolbar="false" search=".onSearch">
                 <fb:filterGroupItems>
@@ -69,5 +70,11 @@
                 </items>
             </Table>
         </content>
+        <footer>
+        <OverflowToolbar id="_IDGenOverflowToolbar8a">
+            <ToolbarSpacer id="_IDGenToolbarSpacer5a"/>
+            <core:Fragment id="_IDGenFragmenta" fragmentName="inventorysample.view.fragments.ErrorButton" type="XML"/>
+        </OverflowToolbar>
+    </footer>
     </Page>
 </mvc:View>

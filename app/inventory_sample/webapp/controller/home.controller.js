@@ -6,10 +6,13 @@ sap.ui.define([
     "sap/ui/model/FilterOperator",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageBox",
-], function (Controller, Fragment, MessageToast, Filter, FilterOperator, JSONModel, MessageBox) {
+    "sap/m/MessagePopover",
+    "sap/m/MessageItem",
+    "inventorysample/controller/ErrorHandler"
+], function (Controller, Fragment, MessageToast, Filter, FilterOperator, JSONModel, MessageBox, MessagePopover, MessageItem, ErrorHandler) {
     "use strict";
 
-    return Controller.extend("inventorysample.controller.home", {
+    return ErrorHandler.extend("inventorysample.controller.home", {
         onInit: function () {
 
             var oUiModel = new JSONModel({
@@ -46,6 +49,10 @@ sap.ui.define([
                     //colorPalette: ['#89d089ff', '#e3a5a5ff', '#d9b671ff', '#aeb2dfff'] // Custom Colors
                 }
             });
+
+            var oMessageManager = sap.ui.getCore().getMessageManager();
+            this.getView().setModel(oMessageManager.getMessageModel(), "message");
+            oMessageManager.registerObject(this.getView(), true);
 
             var oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("Routehome").attachPatternMatched(this._onObjectMatched, this);
@@ -280,24 +287,67 @@ sap.ui.define([
                 reorder_level: this.byId("newReorder").getValue() || 2
             });
 
-            this.byId("createModelDialog").setBusy(true);
+            var oDialog = this.byId("createModelDialog");
 
-            oModel.submitBatch(sGroupId).then(function () {
-                return oNewContext.created();
-            }).then(function () {
-                this.byId("createModelDialog").setBusy(false);
-                MessageToast.show("Model Created. For the stock to increase, you have to add the products with the codes.");
-                this.getView().getModel().getBindings().forEach(function (oBinding) {
+            sap.ui.core.BusyIndicator.show(0);
+
+            oModel.submitBatch(sGroupId)
+                .then(function (oError) {
+                    // If we get here, the HTTP request was sent.
+                    // Now we check if the backend actually created it.
+                    console.log(oError)
+                    oDialog.close();
+                    MessageToast.show("Created successfully.");
+                    this.getView().getModel().getBindings().forEach(function (oBinding) {
                     if (oBinding.getPath() === "/DashboardCards") {
                         oBinding.refresh();
                     }
                 });
-                this.onCloseDialog();
-            }.bind(this)).catch(function (oError) {
-                this.byId("createModelDialog").setBusy(false);
-                MessageBox.error("Backend rejected the save: " + oError.message);
-            }.bind(this));
+                    
+                })
+                .catch(function (oError) {
+                    // We leave this empty or just log it. 
+                    // The MessageManager ALREADY caught the error and put it in the model.
+                    console.log("Request failed, check Message Popover");
+                })
+                .finally(function () {
+                    // --- NUCLEAR UN-FREEZE ---
+                    // This runs 100% of the time. Success or Fail.
+                    sap.ui.core.BusyIndicator.hide();
+                });
         },
+        // onMessagePopoverPress: function (oEvent) {
+        //     var oSource = oEvent.getSource();
+        //     if (!this._oMessagePopover) {
+        //         this._oMessagePopover = new MessagePopover({
+        //             activeTitlePress: function (oEvent) {
+        //                 var oItem = oEvent.getParameter("item");
+        //                 // You can add logic here to navigate to the error field
+        //             },
+        //             headerButton: new sap.m.Button({
+        //                 icon: "sap-icon://delete",
+        //                 text: "Clear",
+        //                 type: "Transparent",
+        //                 press: function () {
+        //                     oMessageManager.removeAllMessages();
+        //                     this._oMessagePopover.close();
+        //                 }.bind(this)
+        //             }),
+        //             items: {
+        //                 path: "message>/",
+        //                 template: new MessageItem({
+        //                     title: "{message>message}",
+        //                     subtitle: "{message>additionalText}",
+        //                     groupName: "{message>target}",
+        //                     type: "{message>type}",
+        //                     description: "{message>description}"
+        //                 })
+        //             }
+        //         });
+        //         this.getView().addDependent(this._oMessagePopover);
+        //     }
+        //     this._oMessagePopover.toggle(oSource);
+        // },
 
         // In your controller or a separate formatter.js
         formatCurrencyShort: function (fValue) {

@@ -245,8 +245,7 @@ sap.ui.define([
                     oListBinding.create({
                         code: oItem.code,
                         status: "available",
-                        details_ID: sDetailID,
-                        adminInCharge_ID: sID
+                        details_ID: sDetailID
                     });
                 }
             });

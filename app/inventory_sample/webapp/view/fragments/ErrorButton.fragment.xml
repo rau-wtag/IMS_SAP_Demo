@@ -1,0 +1,8 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Button id="_IDGenButton29" 
+        icon="sap-icon://alert" 
+        text="{= ${message>/}.length }" 
+        visible="{= ${message>/}.length > 0 }" 
+        type="Reject" 
+        press=".onMessagePopoverPress"/>
+</core:FragmentDefinition>

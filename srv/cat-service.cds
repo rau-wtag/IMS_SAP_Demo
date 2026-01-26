@@ -8,6 +8,16 @@ service CatalogService @(requires:'authenticated-user') {
     @readonly entity StockAlerts as projection on my.StockAlerts;
     @readonly entity ModelNames as projection on my.ModelNames;
     @cds.redirection.target entity Details as projection on my.Details;
+    annotate Details with @(restrict: [
+        {
+            grant: ['*'],
+            to   : 'Admin_Role'
+        },
+        {
+            grant: ['READ'],
+            to   : 'Employee_Role'
+        }
+    ]);
 
     @readonly entity InUseCount as projection on my.InUseCount;
     @readonly entity AvailableCount as projection on my.AvailableCount;
@@ -30,17 +40,30 @@ service CatalogService @(requires:'authenticated-user') {
     @readonly entity PendingRequests as projection on my.PendingRequests;
     @cds.redirection.target entity Requests as projection on my.Requests;
     annotate Requests with @(restrict: [
-        // Rule: A user can read/write ONLY if 'createdBy' matches their ID
-        { grant: ['*'], to: 'authenticated-user', where: 'createdBy = $user' },
-        
-        // Rule: Admins can see/edit EVERYTHING (ignoring the 'where' clause)
+        { grant: ['WRITE', 'UPDATE', 'DELETE'], to: 'authenticated-user', where: 'createdBy = $user' },
+        { grant: ['READ'], to: 'EMPLOYEE_ROLE'},
         { grant: ['*'], to: 'Admin_Role' }
     ]);
 
     @readonly entity MaintenanceAlerts as projection on my.MaintenanceAlerts;
     @cds.redirection.target entity RequestItems as projection on my.RequestItems;
+    annotate RequestItems with @(restrict: [
+        { grant: ['WRITE', 'UPDATE', 'DELETE'], to: 'authenticated-user', where: 'createdBy = $user' },
+        { grant: ['READ'], to: 'EMPLOYEE_ROLE'},
+        { grant: ['*'], to: 'Admin_Role' }
+    ]);
 
     @readonly entity Possessions as projection on my.Possessions;
     @readonly entity RecentRestocks as projection on my.RecentRestocks;
     @cds.redirection.target entity Logs as projection on my.Logs;
+    annotate Logs with @(restrict: [
+        {
+            grant: ['*'],
+            to   : 'Admin_Role'
+        },
+        {
+            grant: ['READ'],
+            to   : 'Employee_Role'
+        }
+    ]);
 }

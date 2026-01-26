@@ -7,10 +7,11 @@ sap.ui.define([
     "sap/m/MessageBox",
     "sap/ui/model/json/JSONModel",
     "sap/ui/core/Fragment",
-], function (Controller, Filter, FilterOperator, History, MessageToast, MessageBox, JSONModel, Fragment) {
+    "inventorysample/controller/ErrorHandler"
+], function (Controller, Filter, FilterOperator, History, MessageToast, MessageBox, JSONModel, Fragment,ErrorHandler) {
     "use strict";
 
-    return Controller.extend("inventorysample.controller.ProductsList", {
+    return ErrorHandler.extend("inventorysample.controller.ProductsList", {
         onInit: function () {
             var oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("ProductsList").attachPatternMatched(this._onObjectMatched, this);
@@ -133,17 +134,16 @@ sap.ui.define([
                         });
                     }
                 });
-
-                // 4. Second Submit: Push all serial numbers
-                return oModel.submitBatch(oModel.getUpdateGroupId());
-
-            }.bind(this)).then(function () {
                 this.byId("bulkCreateDialog").setBusy(false);
                 sap.m.MessageToast.show("Model and Serial Numbers created!");
                 this.onCloseBulkDialog();
                 // Refresh table to show new counts
                 this.byId("productsTable").getBinding("items").refresh();
-            }.bind(this)).catch(function (oError) {
+
+                // 4. Second Submit: Push all serial numbers
+                return oModel.submitBatch(oModel.getUpdateGroupId());
+
+            }).catch(function (oError) {
                 this.byId("bulkCreateDialog").setBusy(false);
                 // Fix for the TypeError: Check if oError exists and has a message
                 if (oNewDetailsContext.getPath()) {
@@ -151,8 +151,12 @@ sap.ui.define([
                     oModel.submitBatch(sGroupId);
                 }
 
-                sap.m.MessageBox.error("Transaction Failed. Changes rolled back. Error: " + oError.message);
-            }.bind(this));
+                console.error("Transaction Failed. Changes rolled back. Error: ");
+            }).finally(function () {
+                    // --- NUCLEAR UN-FREEZE ---
+                    // This runs 100% of the time. Success or Fail.
+                    this.byId("bulkCreateDialog").setBusy(false);
+            });
         },
 
         onCloseBulkDialog: function () {
