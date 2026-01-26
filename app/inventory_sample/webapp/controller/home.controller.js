@@ -117,8 +117,8 @@ sap.ui.define([
                 var total = aCtx.reduce((acc, c) => acc + (parseFloat(c.getProperty("estRepairCost")) || 0), 0);
                 oUiModel.setProperty("/totalRepairCost", total);
             });
-            oModel.bindList("/DashboardCards").requestContexts().then(function (aCtx) {
-                var total = aCtx.reduce((acc, c) => acc + (parseFloat(c.getProperty("unit_price") * c.getProperty("total_count")) || 0), 0);
+            oModel.bindList("/TotalValuation").requestContexts().then(function (aCtx) {
+                var total = aCtx.reduce((acc, c) => acc + (parseFloat(c.getProperty("total_value")) || 0), 0);
                 oUiModel.setProperty("/totalEvalCost", total);
             });
         },

@@ -14,6 +14,7 @@ service CatalogService @(requires:'authenticated-user') {
     @readonly entity RepairCount as projection on my.RepairCount;
     @readonly entity StatusAnalytics as projection on my.StatusAnalytics;
     @readonly entity CategoryDistribution as projection on my.CategoryDistribution;
+    @readonly entity TotalValuation as projection on my.TotalValuation;
     @cds.redirection.target entity Products as projection on my.Products;
     annotate Products with @(restrict: [
         {

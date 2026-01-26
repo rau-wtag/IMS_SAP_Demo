@@ -165,3 +165,11 @@ view CategoryDistribution as select from Products {
 view ModelNames as select from Details {
     key name
 };
+
+view TotalValuation as select from Products {
+    key details.unit_type,
+    count(ID) as total_count : Integer,
+    sum(details.unit_price) as total_value : Decimal(15,2)
+
+} group by details.unit_type;
+
