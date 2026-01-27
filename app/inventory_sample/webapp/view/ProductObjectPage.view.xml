@@ -30,8 +30,8 @@
                         text="Edit"
                         type="Emphasized"
                         press=".onEditPress"
-                        visible="{= ${security>/isAdmin} &amp;&amp; !${ui>/isEditMode} }"
-                    />
+                        visible="{= ${security>/isAdmin} 
+                            &amp;&amp; !${ui>/isEditMode} }"/>
                     <Button
                         id="_IDGenButton16"
                         text="Delete"

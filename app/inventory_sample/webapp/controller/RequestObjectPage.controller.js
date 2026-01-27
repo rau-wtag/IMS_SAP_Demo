@@ -185,7 +185,7 @@ sap.ui.define([
                   
                     oModel.submitBatch("updateGroup").then(function() {
                         this.getView().setBusy(false);
-                        MessageBox.success("Database successfully updated.");
+                        MessageBox.information("Database updated. Check Message Popover in the footer. If there is no popover, then the operation was successful!");
                         oPendingModel.setData({}); 
                     }.bind(this)).catch(function(oError) {
                         this.getView().setBusy(false);

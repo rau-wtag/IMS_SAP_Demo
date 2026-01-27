@@ -135,7 +135,7 @@ sap.ui.define([
                     }
                 });
                 this.byId("bulkCreateDialog").setBusy(false);
-                sap.m.MessageToast.show("Model and Serial Numbers created!");
+                MessageBox.information("Model and Serial Numbers created! Check Message Popover in the footer. If there is no popover, then the operation was successful!");
                 this.onCloseBulkDialog();
                 // Refresh table to show new counts
                 this.byId("productsTable").getBinding("items").refresh();

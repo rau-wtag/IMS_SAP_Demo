@@ -16,7 +16,7 @@
                 icon="sap-icon://add" 
                 text="Create New Category" 
                 type="Emphasized" 
-                visible="true"
+                visible="{security>/isAdmin}"
                 press=".onOpenCreateDialog" />
             <Button id="_IDGenButton2" icon="sap-icon://pull-request" text="Requests ({/PendingRequests/$count})" press=".onNavToRequests" type="Transparent" />
             <Button id="_IDGenButton24" icon="sap-icon://history" text="Logs" press=".onNavToLogs" type="Transparent" />

@@ -27,21 +27,14 @@ service CatalogService @(requires:'authenticated-user') {
     @readonly entity TotalValuation as projection on my.TotalValuation;
     @cds.redirection.target entity Products as projection on my.Products;
     annotate Products with @(restrict: [
-        {
-            grant: ['*'],
-            to   : 'Admin_Role'
-        },
-        {
-            grant: ['READ'],
-            to   : 'Employee_Role'
-        }
-    ]);
+        { grant: ['*'], to: 'Admin_Role'},
+        { grant: ['READ'], to: 'Employee_Role'}]);
     @readonly entity WeeklyActivity as projection on my.WeeklyActivity;
     @readonly entity PendingRequests as projection on my.PendingRequests;
     @cds.redirection.target entity Requests as projection on my.Requests;
     annotate Requests with @(restrict: [
         { grant: ['WRITE', 'UPDATE', 'DELETE'], to: 'authenticated-user', where: 'createdBy = $user' },
-        { grant: ['READ'], to: 'EMPLOYEE_ROLE'},
+        { grant: ['READ'], to: 'Employee_Role'},
         { grant: ['*'], to: 'Admin_Role' }
     ]);
 
@@ -49,7 +42,7 @@ service CatalogService @(requires:'authenticated-user') {
     @cds.redirection.target entity RequestItems as projection on my.RequestItems;
     annotate RequestItems with @(restrict: [
         { grant: ['WRITE', 'UPDATE', 'DELETE'], to: 'authenticated-user', where: 'createdBy = $user' },
-        { grant: ['READ'], to: 'EMPLOYEE_ROLE'},
+        { grant: ['READ'], to: 'Employee_Role'},
         { grant: ['*'], to: 'Admin_Role' }
     ]);
 

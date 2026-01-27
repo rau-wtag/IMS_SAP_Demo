@@ -159,7 +159,7 @@ sap.ui.define([
                 return oModel.submitBatch(sGroupId);
             }.bind(this)).then(function () {
                 this.getView().setBusy(false);
-                MessageToast.show("Request Submitted!");
+                MessageToast.show("Request Submitted!Check Message Popover in the footer. If there is no popover, then the operation was successful!");
                 this.byId("actionReviewDialog").close();
                 this.byId("possessionsTable").removeSelections();
             }.bind(this));

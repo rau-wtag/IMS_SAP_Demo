@@ -70,7 +70,7 @@ module.exports = cds.service.impl(async function() {
                     email: userEmail,
                     role: hanaRole 
                 });
-                userProfile = { ID: newID, name: fullName, email: userEmail, role: hanaRole };
+                userProfile = { ID: userEmail, name: fullName, email: userEmail, role: hanaRole };
             }
 
             return {
@@ -118,7 +118,7 @@ module.exports = cds.service.impl(async function() {
         else if (approved > 0 || rejected > 0) finalStatus = 'PARTIAL';
 
         await UPDATE(Requests).set({ status: finalStatus }).where({ ID: this_item.parent_ID });
-        return finalStatus;
+        //return finalStatus;
     });
 
     this.after('CREATE', 'Products', async (data, req) => {

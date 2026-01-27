@@ -115,7 +115,7 @@ sap.ui.define([
         return oModel.submitBatch(sGroupId);
       }.bind(this)).then(function () {
         this.getView().setBusy(false);
-        sap.m.MessageToast.show("Request Submitted Successfully!");
+        sap.m.MessageToast.show("Request Submitted! Check Message Popover in the footer. If there is no popover, then the operation was successful!");
 
         oCartModel.setProperty("/items", []);
         oCartModel.setProperty("/count", 0);

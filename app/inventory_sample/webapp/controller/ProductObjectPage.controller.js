@@ -253,7 +253,7 @@ sap.ui.define([
 
             oModel.submitBatch(oModel.getUpdateGroupId()).then(function () {
                 this.byId("addSerialsDialog").setBusy(false);
-                MessageToast.show("New serials added successfully!");
+                MessageToast.show("New serials added! Check Message Popover in the footer. If there is no popover, then the operation was successful!");
                 this.onCloseSerialsDialog();
             }.bind(this)).catch(function (oError) {
                 this.byId("addSerialsDialog").setBusy(false);
@@ -286,7 +286,7 @@ sap.ui.define([
             oModel.submitBatch(oModel.getUpdateGroupId()).then(function () {
                 oView.setBusy(false);
                 this.getView().getModel("ui").setProperty("/isEditMode", false);
-                sap.m.MessageToast.show("Product updated successfully");
+                sap.m.MessageToast.show("Product updated. Check Message Popover in the footer. If there is no popover, then the operation was successful!");
             }.bind(this)).catch(function (oError) {
                 oView.setBusy(false);
                 sap.m.MessageBox.error("Update failed: " + oError.message);
@@ -309,7 +309,7 @@ sap.ui.define([
 
                     oContext.delete().then(function () {
                         oView.setBusy(false);
-                        sap.m.MessageToast.show("Product Model Deleted successfully.");
+                        MessageToast.show("Product Model Deleted. Check Message Popover in the footer. If there is no popover, then the operation was successful!");
                         oRouter.navTo("ProductsList", { unitType: sCategory }).byId("productsTable").getBinding("items").refresh();
                     }).catch(function (oError) {
                         oView.setBusy(false);

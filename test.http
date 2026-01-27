@@ -58,4 +58,4 @@ Content-Type: application/json
 
 ###
 # deleting a product
-DELETE http://localhost:4004/odata/v4/catalog/Logs(a6f48e6a-7d20-4c36-b9e3-76ad5df0c7ab)
+DELETE http://localhost:4004/odata/v4/catalog/Products(df258f78-b368-41f7-859c-d958da93a96e)

@@ -297,7 +297,7 @@ sap.ui.define([
                     // Now we check if the backend actually created it.
                     console.log(oError)
                     oDialog.close();
-                    MessageToast.show("Created successfully.");
+                    MessageToast.show("Creation attempted. Check Message Popover in the footer. If there is no popover, then the operation was successful!");
                     this.getView().getModel().getBindings().forEach(function (oBinding) {
                     if (oBinding.getPath() === "/DashboardCards") {
                         oBinding.refresh();
