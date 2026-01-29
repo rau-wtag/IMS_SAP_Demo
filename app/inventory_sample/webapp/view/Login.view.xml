@@ -1,7 +1,18 @@
 <mvc:View controllerName="inventorysample.controller.Login" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" xmlns:layout="sap.ui.layout">
     <Shell id="shell">
+        <Bar id="_IDGenBar12a">
+            <contentRight>
+                <Button id="_IDGenButton20aa" icon="sap-icon://log" type="Transparent"  press=".onLogout" />
+            </contentRight>
+        </Bar>
         <App id="app1">
             <Page id="loginPage" backgroundDesign="List">
+            <headerContent>
+                
+                    <Button id="_IDGenButton20ab" icon="sap-icon://log" type="Transparent"  press=".onLogout" />
+            
+
+            </headerContent>
                 <VBox id="vb" justifyContent="Center" alignItems="Center" class="sapUiLargeMarginTop">
                     <Title id="_IDGenTitle16" text="Inventory Management System" titleStyle="H1" class="sapUiMediumMarginBottom"/>
 

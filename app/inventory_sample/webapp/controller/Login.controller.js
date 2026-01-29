@@ -35,6 +35,36 @@ sap.ui.define(["sap/ui/core/mvc/Controller", "sap/m/MessageBox", "sap/ui/model/j
                     });
                     
                 });
+        },
+
+        onLogout: function () {
+            var sUrl = window.location.origin + "/odata/v4/catalog/";
+            var oRequest = new XMLHttpRequest();
+
+            // 2. THE SECRET: Send WRONG credentials ('logout':'logout') 
+            // This overwrites the browser's saved 'admin@test.com'
+            oRequest.open("GET", sUrl, true, "logout", "logout"); 
+            oRequest.send();
+
+            oRequest.onreadystatechange = function() {
+                if (oRequest.readyState === 4) {
+                    // 3. Clear the local security model
+                    this.getOwnerComponent().getModel("security").setData({
+                        isAdmin: false,
+                        isLoggedIn: false,
+                        user: "",
+                        name:"",
+                        ID:"",
+                        role:""
+
+                    });
+
+                    window.location.href = "/app-logout";
+                    console.log(window.location.href)
+                    console.log(this.getOwnerComponent().getModel("security").getData())
+                    //window.location.reload(); 
+                }
+            }.bind(this);
         }
     });
 });
