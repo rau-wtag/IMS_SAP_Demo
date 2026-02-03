@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-const { UPDATE, INSERT } = require('@sap/cds/lib/ql/cds-ql');
+const { UPDATE, INSERT, SELECT } = require('@sap/cds/lib/ql/cds-ql');
 const { executeHttpRequest } = require('@sap-cloud-sdk/http-client');
 
 module.exports = cds.service.impl(async function() {
@@ -119,6 +119,46 @@ module.exports = cds.service.impl(async function() {
 
         await UPDATE(Requests).set({ status: finalStatus }).where({ ID: this_item.parent_ID });
         //return finalStatus;
+    });
+
+    this.before('DELETE', 'RequestItems', async (req) => {
+        //console.log("[REQ]", req)
+        console.log("[DATA]", req.data.ID)
+        const this_item = await SELECT.one.from(RequestItems).where({ID: req.data.ID});
+        const this_parent = await SELECT.one.from(Requests).where({ID: this_item.parent_ID});
+        var this_product = await SELECT.one.from(Products).where({ID: this_item.product_ID});
+
+    
+        req.cleanupParentID = this_parent.ID
+        finalStatus = null
+
+        if(this_parent.type === 'request')
+        {
+            finalStatus = 'available'
+        }
+        else if (this_parent.type === 'repair')
+        {
+            if(!this_product.currentPossession_ID)
+            {
+                finalStatus = 'available'
+            }
+            else finalStatus = null
+        }
+
+        await UPDATE(Products).set({ status: finalStatus }).where({ ID: this_product.ID });
+
+    });
+
+    this.after('DELETE', 'RequestItems', async (res, req) => {
+
+        if(req.cleanupParentID) {
+            const items = await SELECT.from(RequestItems).where({ parent_ID: req.cleanupParentID })
+
+            if (items.length === 0) {
+                console.log("Auto-deleting empty request:", req.cleanupParentID);
+                await DELETE.from(Requests).where({ ID: req.cleanupParentID });
+            }
+        }
     });
 
     this.after('CREATE', 'Products', async (data, req) => {
