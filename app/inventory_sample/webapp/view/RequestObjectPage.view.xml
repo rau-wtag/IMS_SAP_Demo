@@ -50,7 +50,7 @@
                 <m:columns>
                     <m:Column id="_IDGenColumn20"><m:Text id="_IDGenText29" text="Asset Info" /></m:Column>
                     <m:Column id="_IDGenColumn21" minScreenWidth="Tablet" demandPopin="true"><m:Text id="_IDGenText30" text="Status" /></m:Column>
-                    <m:Column id="_IDGenColumn22" hAlign="End" visible="{security>/isAdmin}"><m:Text id="_IDGenText31" text="Actions" /></m:Column>
+                    <m:Column id="_IDGenColumn22" hAlign="End" visible="{ui>/canModify}"><m:Text id="_IDGenText31" text="Actions" /></m:Column>
                 </m:columns>
                 <m:items>
                     <m:ColumnListItem id="_IDGenColumnListItem8">
@@ -61,8 +61,14 @@
                             </m:VBox>
                             <m:ObjectStatus id="_IDGenObjectStatus4" text="{status}" state="{= ${status} === 'APPROVED' ? 'Success' : (${status} === 'REJECTED' ? 'Error' : 'None') }" />
                             <m:HBox id="_IDGenHBox3" justifyContent="End">
-                                <m:Button id="_IDGenButton" icon="sap-icon://accept" type="Accept" press=".onApproveItem" class="sapUiTinyMarginEnd" enabled="{= ${status} === 'PENDING'}"/>
-                                <m:Button id="_IDGenButton26" icon="sap-icon://decline" type="Reject" press=".onRejectItem" enabled="{= ${status} === 'PENDING'}"/>
+                                <m:Button id="_IDGenButton" icon="sap-icon://accept" type="Accept" press=".onApproveItem" class="sapUiTinyMarginEnd" 
+                                    visible="{security>/isAdmin}" enabled="{= ${status} === 'PENDING'}"/>
+                                <m:Button id="_IDGenButton26" icon="sap-icon://decline" type="Reject" press=".onRejectItem" class="sapUiTinyMarginEnd"
+                                    visible="{security>/isAdmin}" enabled="{= ${status} === 'PENDING'}"/>
+                                
+                                <m:Button id="btnRemoveItem" icon="sap-icon://delete" type="Transparent" press=".onRemoveItem" 
+                                    visible="{ui>/canModify}" 
+                                    tooltip="Remove Item" />
                             </m:HBox>
                         </m:cells>
                     </m:ColumnListItem>
@@ -72,6 +78,9 @@
 
         <m:footer>
             <m:OverflowToolbar id="_IDGenOverflowToolbar6">
+                <m:Button id="btnCancelRequest" text="Cancel Request" type="Reject" press=".onCancelRequest" 
+                    visible="{ui>/canModify}"  icon="sap-icon://delete" />
+
                 <m:ToolbarSpacer id="_IDGenToolbarSpacer1" />
                 <m:Button id="_IDGenButton27" text="Finalize &amp; Sync" type="Emphasized" press=".onConfirmFinalDecision" visible="{security>/isAdmin}" icon="sap-icon://save" />
             </m:OverflowToolbar>

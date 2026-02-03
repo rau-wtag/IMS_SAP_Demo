@@ -43,7 +43,7 @@ entity Requests : cuid, managed {
 
 entity RequestItems : cuid, managed {
     key ID      : UUID;
-    parent      : Association to Requests;
+    parent      : Association to Requests @on.delete: #Cascade;
     product     : Association to Products;
     status      : String enum { PENDING; APPROVED; REJECTED; } default 'PENDING';
     adminNote   : String; 
