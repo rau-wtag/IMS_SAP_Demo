@@ -70,9 +70,6 @@
     "app/*"
   ],
   "sapux": [
-    "app/inventory_list",
-    "app/project1",
-    "app/inventory_user_management",
-    "app/inventory_user_management"
+    "app/inventory_list"
   ]
 }

@@ -112,7 +112,7 @@
         </HBox>
             </fb:FilterBar>
 
-            <Table id="requestTable" items="{path: '/Requests', sorter: { path: 'createdAt', descending: false }}" sticky="ColumnHeaders" mode="None">
+            <Table id="requestTable" items="{path: '/Requests', sorter: { path: 'createdAt', descending: true }}" sticky="ColumnHeaders" mode="None">
                 <columns>
                     <Column id="_IDGenColumn16"><Text id="_IDGenText21" text="Request ID" /></Column>
                     <Column id="_IDGenColumn16a"><Text id="_IDGenText21a" text="Type" /></Column>
