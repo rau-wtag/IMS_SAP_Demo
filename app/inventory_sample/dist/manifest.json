@@ -1,0 +1,228 @@
+{
+	"_version": "1.76.0",
+	"sap.app": {
+		"id": "inventorysample",
+		"type": "application",
+		"i18n": {
+			"bundleUrl": "i18n/i18n.properties",
+			"supportedLocales": [
+				""
+			]
+		},
+		"applicationVersion": {
+			"version": "0.0.1"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"resources": "resources.json",
+		"sourceTemplate": {
+			"id": "@sap/generator-fiori:basic",
+			"version": "1.20.0",
+			"toolsId": "38bd2fb1-2bf5-41b5-82a2-ba25afd96cbe"
+		},
+		"dataSources": {
+			"mainService": {
+				"uri": "/odata/v4/catalog/",
+				"type": "OData",
+				"settings": {
+					"annotations": [],
+					"odataVersion": "4.0"
+				}
+			}
+		},
+		"crossNavigation": {
+			"inbounds": {
+				"Dashboard-display": {
+					"semanticObject": "Dashboard",
+					"action": "display",
+					"title": "{{Dashboard-display.flpTitle}}",
+					"icon": "sap-icon://dashboard",
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					}
+				}
+			}
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"flexEnabled": true,
+		"dependencies": {
+			"minUI5Version": "1.143.2",
+			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {},
+				"sap.viz": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "inventorysample.i18n.i18n",
+					"supportedLocales": [
+						""
+					]
+				}
+			},
+			"": {
+				"dataSource": "mainService",
+				"preload": true,
+				"settings": {
+					"operationMode": "Server",
+					"autoExpandSelect": true,
+					"earlyRequests": true,
+					"synchronizationMode": "None",
+					"updateGroupId": "updateGroup"
+				}
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"type": "View",
+				"path": "inventorysample.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"async": true
+			},
+			"routes": [
+				{
+					"name": "Login",
+					"pattern": "",
+					"target": "Login"
+				},
+				{
+					"name": "Routehome",
+					"pattern": "home",
+					"target": [
+						"Targethome"
+					]
+				},
+				{
+					"name": "ProductsList",
+					"pattern": "Products/{unitType}",
+					"target": [
+						"TargetProductsList"
+					]
+				},
+				{
+					"name": "ProductObjectPage",
+					"pattern": "ProductDetail/{ID}",
+					"target": [
+						"TargetProductObjectPage"
+					]
+				},
+				{
+					"name": "RequestList",
+					"pattern": "RequestList",
+					"target": [
+						"TargetRequestList"
+					]
+				},
+				{
+					"name": "RequestObjectPage",
+					"pattern": "RequestDetail/{ID}",
+					"target": [
+						"TargetRequestObjectPage"
+					]
+				},
+				{
+					"name": "LogList",
+					"pattern": "LogList",
+					"target": [
+						"TargetLogList"
+					]
+				},
+				{
+					"name": "PossessionList",
+					"pattern": "PossessionList/{userID}",
+					"target": [
+						"TargetPossessionList"
+					]
+				}
+			],
+			"targets": {
+				"Login": {
+					"id": "Login",
+					"name": "Login",
+					"viewLevel": 0
+				},
+				"Targethome": {
+					"id": "home",
+					"name": "home",
+					"viewLevel": 1
+				},
+				"TargetProductsList": {
+					"id": "ProductsList",
+					"name": "ProductsList",
+					"viewLevel": 2
+				},
+				"TargetProductObjectPage": {
+					"id": "ProductObjectPage",
+					"name": "ProductObjectPage",
+					"viewLevel": 3
+				},
+				"TargetRequestList": {
+					"id": "RequestList",
+					"name": "RequestList",
+					"viewLevel": 2
+				},
+				"TargetRequestObjectPage": {
+					"id": "RequestObjectPage",
+					"name": "RequestObjectPage",
+					"viewLevel": 3
+				},
+				"TargetLogList": {
+					"id": "LogList",
+					"name": "LogList",
+					"viewLevel": 2
+				},
+				"TargetPossessionList": {
+					"id": "PossessionList",
+					"name": "PossessionList",
+					"viewLevel": 2
+				}
+			}
+		},
+		"rootView": {
+			"viewName": "inventorysample.view.App",
+			"type": "XML",
+			"id": "App",
+			"async": true
+		},
+		"flexBundle": false
+	},
+	"sap.cloud": {
+		"public": true,
+		"service": "sample.service"
+	}
+}

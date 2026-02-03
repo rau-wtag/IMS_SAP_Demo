@@ -1,0 +1,80 @@
+<mvc:View
+    controllerName="inventorysample.controller.ProductsList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core">
+    <Page id="productPage" title="Products" showNavButton="true" navButtonPress=".onNavBack" showFooter="true">
+        <content>
+            <fb:FilterBar id="filterbar" persistencyKey="PKey" useToolbar="false" search=".onSearch">
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem1" name="UnitType" label="Unit Type" groupName="Group1" visibleInFilterBar="true">
+                        <fb:control>
+                            <Input id="filterUnitType" placeholder="Filtering by category..." editable="false"/>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                </fb:filterGroupItems>
+            </fb:FilterBar>
+
+            <Table id="productsTable"
+                items="{
+                    path: '/Details',
+                    parameters: {
+                        '$expand': {
+                            'items' : { '$count': true }
+                        }
+                    }
+                }"
+                class="sapUiResponsiveMargin"
+                width="auto"
+                mode="MultiSelect" 
+                selectionChange=".onTableSelectionChange">
+                <headerToolbar>
+                    <OverflowToolbar id="_IDGenOverflowToolbar">
+                        <Title id="tableHeader" text="Inventory Items" />
+                        <SearchField 
+                            id="tableSearchField"
+                            width="30%" 
+                            placeholder="Search Name or Description..."
+                            liveChange=".onTableSearch" />
+                        <ToolbarSpacer id="_IDGenToolbarSpacer" />
+                        <Button id = "addproduct"
+                                icon="sap-icon://add-product" 
+                                text="New Model &amp; Serials" 
+                                visible="{security>/isAdmin}" 
+                                press=".onOpenBulkDialog" 
+                                type="Emphasized"/>
+                        <Button id="deleteProduct" icon="sap-icon://delete" text="Delete" 
+                visible="{security>/isAdmin}" press=".onDeleteSelected" type="Reject"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column id="_IDGenColumn"><Text id="_IDGenText" text="Product Name"/></Column>
+                    <Column id="_IDGenColumn11"><Text id="_IDGenText15" text="Description"/></Column>
+                    <Column id="_IDGenColumn1"><Text id="_IDGenText1" text="Unit Price"/></Column>
+                    <Column id="_IDGenColumn3" hAlign="End"><Text id="_IDGenText3" text="Stock Count"/></Column>
+
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem" type="Navigation" press=".onRowPress">
+                        <cells>
+                           
+                            <ObjectIdentifier id="_IDGenObjectIdentifier" title="{name}" text="{unit_type}"/>
+                            <ObjectIdentifier id="_IDGenObjectIdentifier1" title="{description}" />
+                            <ObjectNumber id="_IDGenObjectNumber" number="{unit_price}" unit="BDT"/>
+                            <ObjectNumber id="_IDGenText4" number="{items/$count}" unit="Units" />
+                            
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <footer>
+        <OverflowToolbar id="_IDGenOverflowToolbar8a">
+            <ToolbarSpacer id="_IDGenToolbarSpacer5a"/>
+            <core:Fragment id="_IDGenFragmenta" fragmentName="inventorysample.view.fragments.ErrorButton" type="XML"/>
+        </OverflowToolbar>
+    </footer>
+    </Page>
+</mvc:View>

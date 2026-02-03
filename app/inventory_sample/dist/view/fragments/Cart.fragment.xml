@@ -1,0 +1,33 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+    <Dialog id="cartDialog" title="Request Cart" contentWidth="500px">
+        <content>
+            <Table id="_IDGenTable" items="{cart>/items}" noDataText="No items in cart">
+                <columns>
+                    <Column id="_IDGenColumn4"><Text id="_IDGenText5" text="Product"/></Column>
+                    <Column id="_IDGenColumn15" hAlign="End" width="50px" />
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem6">
+                        <cells>
+                            <VBox id="_IDGenVBox3">
+                                <Text id="_IDGenText19" text="{cart>modelName}" />
+                                <Text id="_IDGenText20" text="{cart>code}" renderWhitespace="false" />
+                            </VBox>
+                            <Button id="_IDGenButton19" icon="sap-icon://delete" type="Transparent" press=".onDeleteCartItem" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+            <f:SimpleForm id="_IDGenSimpleForm2" editable="true" layout="ResponsiveGridLayout">
+                <Label id="_IDGenLabel11" text="Reason" required="true" />
+                <TextArea id="requestCause" rows="3" />
+            </f:SimpleForm>
+        </content>
+        <beginButton>
+            <Button id="_IDGenButton21" text="Submit" type="Accept" press=".onConfirmCart" enabled="{= ${cart>/count} > 0}" />
+        </beginButton>
+        <endButton>
+            <Button id="_IDGenButton22" text="Close" press=".onCloseCart" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

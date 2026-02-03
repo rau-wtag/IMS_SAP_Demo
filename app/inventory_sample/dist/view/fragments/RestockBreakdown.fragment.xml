@@ -1,0 +1,22 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <ResponsivePopover id="_IDGenResponsivePopover1" title="Restock Requirement Breakdown" placement="Bottom">
+        <content>
+            <Table id="_IDGenTable1" items="{/StockAlerts}">
+                <columns>
+                    <Column id="_IDGenColumn6" width="20%"><Text id="_IDGenText63" text="Model" /></Column>
+                    <Column id="_IDGenColumn36" width="20%"><Text id="_IDGenText64" text="Qty Needed" /></Column>
+                    <Column id="_IDGenColumn37" width="20%"><Text id="_IDGenText65" text="Est. Cost" /></Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem12">
+                        <cells>
+                            <Text id="_IDGenText66" text="{name}" />
+                            <Text id="_IDGenText67" text="{itemsToOrder}" />
+                            <Text id="_IDGenText68" text="{path: 'estimatedCost', type: 'Currency', formatOptions: {showMeasure: true}} BDT" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+    </ResponsivePopover>
+</core:FragmentDefinition>

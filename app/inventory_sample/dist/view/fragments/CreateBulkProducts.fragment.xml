@@ -1,0 +1,49 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+    <Dialog id="bulkCreateDialog" title="Create New Model &amp; Serials" contentWidth="500px">
+        <content>
+            <f:SimpleForm id="_IDGenSimpleForm" editable="true" layout="ResponsiveGridLayout">
+                <f:toolbar>
+                    <Toolbar id="_IDGenToolbar"><Title id="_IDGenTitle1" text="Step 1: Model Details"/></Toolbar>
+                </f:toolbar>
+                <Label id="_IDGenLabel5" text="Product Name" required="true"/>
+                <Input id="bulkName" placeholder="e.g. Dell Latitude 5420"/>
+                <Label id="_IDGenLabel6" text="Description"/>
+                <TextArea id="bulkDesc" rows="2"/>
+                <Label id="_IDGenLabel7" text="Price"/>
+                <Input id="bulkPrice" type="Number" description="BDT"/>
+                <Label id="_IDGenLabel7a" text="Reorder Level"/>
+                <Input id="bulkReorder" type="Number" description="units"/>
+            </f:SimpleForm>
+
+            <Table id="newSerialsTable" 
+                   items="{bulk>/newSerials}" 
+                   noDataText="Add at least one serial number">
+                <headerToolbar>
+                    <OverflowToolbar id="_IDGenOverflowToolbar1">
+                        <Title id="_IDGenTitle3" text="Step 2: Serial Numbers"/>
+                        <ToolbarSpacer id="_IDGenToolbarSpacer2"/>
+                        <Button id="_IDGenButton10" icon="sap-icon://add" text="Add Row" press=".onAddSerialRow"/>
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column id="_IDGenColumn10"><Text id="_IDGenText16" text="Serial Code / Asset ID"/></Column>
+                    <Column id="_IDGenColumn12" width="50px"/>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem4">
+                        <cells>
+                            <Input id="_IDGenInput" value="{bulk>code}" placeholder="Enter Serial Number"/>
+                            <Button id="_IDGenButton11" icon="sap-icon://delete" type="Transparent" press=".onDeleteSerialRow"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <beginButton>
+            <Button id="_IDGenButton8" text="Create All" type="Accept" press=".onSaveBulkProducts"/>
+        </beginButton>
+        <endButton>
+            <Button id="_IDGenButton12" text="Cancel" press=".onCloseBulkDialog"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
