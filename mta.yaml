@@ -1,0 +1,178 @@
+_schema-version: 3.3.0
+ID: final_inventory
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: final_inventory-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: final_inventory-auth
+  - name: final_inventory-db
+  - name: final_inventory-destination
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    instances: 1
+  build-parameters:
+    builder: npm-ci
+- name: final_inventory-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: final_inventory-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: final_inventory
+  type: approuter.nodejs
+  path: app/router
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+  - name: final_inventory-auth
+  - name: final_inventory-html5-runtime
+  - name: final_inventory-destination
+  provides:
+  - name: app-api
+    properties:
+      app-protocol: ${protocol}
+      app-uri: ${default-uri}
+  parameters:
+    disk-quota: 256M
+    keep-existing-routes: true
+    memory: 256M
+- name: final_inventory-app-deployer
+  type: com.sap.application.content
+  path: gen
+  requires:
+  - name: final_inventory-auth
+  - name: srv-api
+  - name: final_inventory-html5-repo-host
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+      content-target: true
+  build-parameters:
+    build-result: app/
+    requires:
+    - artifacts:
+      - ims.zip
+      name: final_inventoryims
+      target-path: app/
+- name: final_inventoryims
+  type: html5
+  path: app/ims
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: final_inventory-destinations
+  type: com.sap.application.content
+  requires:
+  - name: final_inventory-auth
+    parameters:
+      service-key:
+        name: final_inventory-auth-key
+  - name: final_inventory-html5-repo-host
+    parameters:
+      service-key:
+        name: final_inventory-html5-repo-host-key
+  - name: srv-api
+  - name: final_inventory-destination
+    parameters:
+      content-target: true
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: final_inventory-html5-repository
+          ServiceInstanceName: final_inventory-html5-repo-host
+          ServiceKeyName: final_inventory-html5-repo-host-key
+          sap.cloud.service: final_inventory.service
+        - Authentication: OAuth2UserTokenExchange
+          Name: final_inventory-auth
+          ServiceInstanceName: final_inventory-auth
+          ServiceKeyName: final_inventory-auth-key
+          sap.cloud.service: final_inventory.service
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+resources:
+- name: final_inventory-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      oauth2-configuration:
+        redirect-uris:
+        - https://*~{app-api/app-uri}/**
+      tenant-mode: dedicated
+      xsappname: final_inventory-${org}-${space}
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+  requires:
+  - name: app-api
+- name: final_inventory-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: final_inventory-html5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
+- name: final_inventory-html5-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+- name: final_inventory-destination
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+    service: destination
+    service-plan: lite
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production

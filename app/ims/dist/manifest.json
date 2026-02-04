@@ -1,0 +1,223 @@
+{
+	"_version": "1.76.0",
+	"sap.app": {
+		"id": "ims",
+		"type": "application",
+		"i18n": {
+			"bundleUrl": "i18n/i18n.properties",
+			"supportedLocales": [
+				""
+			]
+		},
+		"applicationVersion": {
+			"version": "0.0.1"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"resources": "resources.json",
+		"sourceTemplate": {
+			"id": "@sap/generator-fiori:basic",
+			"version": "1.20.0",
+			"toolsId": "c219c45d-4379-4f88-93fc-8fb3a6f645c9"
+		},
+		"dataSources": {
+			"mainService": {
+				"uri": "/odata/v4/catalog/",
+				"type": "OData",
+				"settings": {
+					"annotations": [],
+					"odataVersion": "4.0"
+				}
+			}
+		},
+		"crossNavigation": {
+			"inbounds": {
+				"ims-display": {
+					"semanticObject": "ims",
+					"action": "display",
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					}
+				}
+			}
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"flexEnabled": true,
+		"dependencies": {
+			"minUI5Version": "1.144.0",
+			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "ims.i18n.i18n",
+					"supportedLocales": [
+						""
+					]
+				}
+			},
+			"": {
+				"dataSource": "mainService",
+				"preload": true,
+				"settings": {
+					"operationMode": "Server",
+					"autoExpandSelect": true,
+					"earlyRequests": true
+				}
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"type": "View",
+				"path": "ims.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"async": true
+			},
+			"routes": [
+				{
+					"name": "Login",
+					"pattern": "",
+					"target": "Login"
+				},
+				{
+					"name": "Routehome",
+					"pattern": "home",
+					"target": [
+						"Targethome"
+					]
+				},
+				{
+					"name": "ProductsList",
+					"pattern": "Products/{unitType}",
+					"target": [
+						"TargetProductsList"
+					]
+				},
+				{
+					"name": "ProductObjectPage",
+					"pattern": "ProductDetail/{ID}",
+					"target": [
+						"TargetProductObjectPage"
+					]
+				},
+				{
+					"name": "RequestList",
+					"pattern": "RequestList",
+					"target": [
+						"TargetRequestList"
+					]
+				},
+				{
+					"name": "RequestObjectPage",
+					"pattern": "RequestDetail/{ID}",
+					"target": [
+						"TargetRequestObjectPage"
+					]
+				},
+				{
+					"name": "LogList",
+					"pattern": "LogList",
+					"target": [
+						"TargetLogList"
+					]
+				},
+				{
+					"name": "PossessionList",
+					"pattern": "PossessionList/{userID}",
+					"target": [
+						"TargetPossessionList"
+					]
+				}
+			],
+			"targets": {
+				"Login": {
+					"id": "Login",
+					"name": "Login",
+					"viewLevel": 0
+				},
+				"Targethome": {
+					"id": "home",
+					"name": "home",
+					"viewLevel": 1
+				},
+				"TargetProductsList": {
+					"id": "ProductsList",
+					"name": "ProductsList",
+					"viewLevel": 2
+				},
+				"TargetProductObjectPage": {
+					"id": "ProductObjectPage",
+					"name": "ProductObjectPage",
+					"viewLevel": 3
+				},
+				"TargetRequestList": {
+					"id": "RequestList",
+					"name": "RequestList",
+					"viewLevel": 2
+				},
+				"TargetRequestObjectPage": {
+					"id": "RequestObjectPage",
+					"name": "RequestObjectPage",
+					"viewLevel": 3
+				},
+				"TargetLogList": {
+					"id": "LogList",
+					"name": "LogList",
+					"viewLevel": 2
+				},
+				"TargetPossessionList": {
+					"id": "PossessionList",
+					"name": "PossessionList",
+					"viewLevel": 2
+				}
+			}
+		},
+		"rootView": {
+			"viewName": "ims.view.App",
+			"type": "XML",
+			"id": "App",
+			"async": true
+		},
+		"flexBundle": false
+	},
+	"sap.cloud": {
+		"public": true,
+		"service": "final_inventory.service"
+	}
+}

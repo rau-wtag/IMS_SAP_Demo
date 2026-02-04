@@ -1,0 +1,38 @@
+<mvc:View controllerName="ims.controller.Login" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f" xmlns:layout="sap.ui.layout">
+    <Shell id="shell">
+        <Bar id="_IDGenBar12a">
+            <contentRight>
+                <Button id="_IDGenButton20aa" icon="sap-icon://log" type="Transparent"  press=".onLogout" />
+            </contentRight>
+        </Bar>
+        <App id="app1">
+            <Page id="loginPage" backgroundDesign="List">
+            <headerContent>
+                
+                    <Button id="_IDGenButton20ab" icon="sap-icon://log" type="Transparent"  press=".onLogout" />
+            
+
+            </headerContent>
+                <VBox id="vb" justifyContent="Center" alignItems="Center" class="sapUiLargeMarginTop">
+                    <Title id="_IDGenTitle16" text="Inventory Management System" titleStyle="H1" class="sapUiMediumMarginBottom"/>
+
+                    <VBox id="_IDGenVBox1" alignItems="Center" visible="{= !!${security>/name} }" class="sapUiMediumMarginBottom">
+                        <Title id="_IDGenTitle15" text="Welcome back," titleStyle="H3"/>
+                        <Title id="_IDGenTitle17" text="{security>/name}" titleStyle="H2" class="sapUiTinyMarginTop"/>
+                        <Text id="_IDGenText71" text="{security>/user}" class="sapUiTinyMarginTop"/> 
+                        <ObjectStatus id="_IDGenObjectStatus9" 
+                            text="{= ${security>/isAdmin} ? 'Administrator' : 'Employee' }" 
+                            state="{= ${security>/isAdmin} ? 'Success' : 'Information' }" 
+                            class="sapUiSmallMarginTop"/>
+                    </VBox>
+
+                    <Button id="_IDGenButton1" 
+                        text="{= ${security>/name} ? 'Continue to Dashboard' : 'Log In / Enter System' }" 
+                        type="Emphasized" 
+                        press=".onEnter" 
+                        width="250px"/>
+                </VBox>
+            </Page>
+        </App>
+    </Shell>
+</mvc:View>

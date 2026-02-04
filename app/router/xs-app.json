@@ -1,0 +1,16 @@
+{
+  "welcomeFile": "ims",
+  "authenticationMethod": "route",
+   "logout": {
+    "logoutEndpoint": "/app-logout",
+    "logoutPage": "/"
+  },
+  "routes": [
+    {
+      "source": "^/(.*)$",
+      "target": "$1",
+      "destination": "srv-api",
+      "csrfProtection": true
+    }
+  ]
+}

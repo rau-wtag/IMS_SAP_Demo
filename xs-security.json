@@ -1,0 +1,43 @@
+{
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Admin_Role",
+      "description": "Admin_Role"
+    },
+    {
+      "name": "$XSAPPNAME.Employee_Role",
+      "description": "Employee_Role"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "Admin_Role",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.Admin_Role"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "Employee_Role",
+      "description": "generated",
+      "scope-references": [
+        "$XSAPPNAME.Employee_Role"
+      ],
+      "attribute-references": []
+    }
+  ],
+  "authorities-inheritance": false,
+  "oauth2-configuration": {
+    "credential-types": [
+      "binding-secret",
+      "x509"
+    ],
+    "redirect-uris": [
+      "https://*.us10-001.hana.ondemand.com/**",
+      "https://*.us10.hana.ondemand.com/**",
+      "http://localhost:5000/login/callback"
+    ]
+  }
+}

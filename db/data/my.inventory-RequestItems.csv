@@ -1,0 +1,8 @@
+ID,parent_ID,product_ID,status,adminNote,createdAt,createdBy,modifiedAt,modifiedBy
+13ed64a7-f05b-434a-9eac-dfd7c4a349f0,b20fde79-9ffd-488b-8060-a6a1df7148e4,497e555a-7fbe-4093-810c-4614323b09fb,APPROVED,,2026-01-12T04:41:29.664Z,lamiya.orpa@welldev.io,2026-01-12T05:28:21.695Z,lamiya.orpa@welldev.io
+07a7c203-620f-4056-816e-559eb27d4cbd,b20fde79-9ffd-488b-8060-a6a1df7148e4,3ba3770f-4e3c-4d9b-9d55-34622c7ab930,APPROVED,,2026-01-12T04:41:29.664Z,lamiya.orpa@welldev.io,2026-01-12T05:20:23.696Z,lamiya.orpa@welldev.io
+4aa46bcd-c906-413c-b3ae-a80ef97cc97c,20ef485a-9f35-4987-aa9d-9e22f04b3869,cb9eaac9-1940-41df-9da5-02a97cfff751,PENDING,,2026-01-12T07:58:10.246Z,lamiya.orpa@welldev.io,2026-01-12T07:58:10.246Z,lamiya.orpa@welldev.io
+2635c952-ed0c-493c-bd15-3056c805f034,20ef485a-9f35-4987-aa9d-9e22f04b3869,3db6e5ce-06c8-45d9-894f-16e30719af73,PENDING,,2026-01-12T07:58:10.246Z,lamiya.orpa@welldev.io,2026-01-12T07:58:10.246Z,lamiya.orpa@welldev.io
+be4e42f3-9129-4360-bfd2-1c2babb33e00,cd172227-c05d-4c81-9701-ac62d4b95ce3,3f5f2cce-0feb-4172-a6c1-b7df3567fd9c,APPROVED,,2026-01-12T09:11:53.858Z,ramisa.zaman@welldev.io,2026-01-12T09:12:44.370Z,lamiya.orpa@welldev.io
+09e81f6d-7762-4d37-8ae6-4bc2b4ffe86a,cd172227-c05d-4c81-9701-ac62d4b95ce3,e218624e-728d-4e5c-8300-f3fd9c124db5,APPROVED,,2026-01-12T09:11:53.858Z,ramisa.zaman@welldev.io,2026-01-12T09:12:44.370Z,lamiya.orpa@welldev.io
+203a546c-095c-4922-bc14-1819ccbae8d8,cd172227-c05d-4c81-9701-ac62d4b95ce3,dc4144b1-00f6-42d8-bb99-ca426071cca3,APPROVED,,2026-01-12T09:11:53.858Z,ramisa.zaman@welldev.io,2026-01-12T09:12:44.370Z,lamiya.orpa@welldev.io

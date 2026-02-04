@@ -1,0 +1,69 @@
+{
+  "name": "final_inventory",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "dependencies": {
+    "@cap-js/hana": "^2",
+    "@sap/cds": "^9",
+    "@sap/xssec": "^4",
+    "express": "^4"
+  },
+  "devDependencies": {
+    "@cap-js/sqlite": "^2",
+    "@sap/cds-dk": "^9",
+    "cds-plugin-ui5": "^0.13.0",
+    "rimraf": "^5.0.5",
+    "mbt": "^1.2.29"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-ims": "cds watch --open ims/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "undeploy": "cf undeploy final_inventory --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+  },
+  "cds": {
+    "requires": {
+      "auth": {
+        "kind": "mocked",
+        "roles": {
+          "Admin_Role": [
+            "Admin_Role",
+            "$XSAPPNAME.Admin_Role"
+          ],
+          "Employee_Role": [
+            "Employee_Role",
+            "$XSAPPNAME.Employee_Role"
+          ]
+        }
+      },
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": "db.sqlite"
+        },
+        "schema_evolution": "auto"
+      },
+      "[hybrid]": {
+        "auth": {
+          "kind": "xsuaa"
+        }
+      },
+      "[production]": {
+        "auth": {
+          "kind": "xsuaa"
+        },
+        "db": {
+          "kind": "hana"
+        },
+        "html5-repo": true,
+        "destinations": true
+      },
+      "workzone": true
+    }
+  },
+  "private": true,
+  "workspaces": [
+    "app/*"
+  ]
+}

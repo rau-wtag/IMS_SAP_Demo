@@ -1,0 +1,23 @@
+<mvc:View controllerName="ims.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns="sap.m"
+    displayBlock="true">
+    <Bar id="_IDGenBar122" visible="{isLogin>/isLoggedIn}">
+        <contentLeft>
+            <Title id="_IDGenTitle99" text="Inventory Suite" titleStyle="H5" class="sapUiSmallMarginBegin" />
+        </contentLeft>
+        <contentRight>
+            <Button id="_IDGenButton209" 
+                icon="sap-icon://cart" 
+                text="Cart ({cart>/count})"
+                type="Transparent"
+                press=".onOpenCart" />
+            <Button id="_IDGenButton20a9" icon="sap-icon://log" type="Transparent"  press=".onLogout" />
+        </contentRight>
+    </Bar>
+    <App id="app">        
+    </App>
+    
+  
+</mvc:View>

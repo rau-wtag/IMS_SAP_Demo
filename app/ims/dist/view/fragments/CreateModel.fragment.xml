@@ -1,0 +1,28 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+    <Dialog id="createModelDialog" title="Add New Model">
+        <f:SimpleForm id="_IDGenSimpleForm1" editable="true" layout="ResponsiveGridLayout">
+            <Label id="_IDGenLabel2" text="Model Name" required="true"/>
+            <Input id="newName" placeholder="e.g., ThinkPad X1"/>
+            
+            <Label id="_IDGenLabel3" text="Category"/>
+            <ComboBox id="newCategoryCombo" items="{path: '/DashboardCards'}" placeholder="Select existing..." change=".onCategorySelectionChange">
+                <items>
+                    <core:ListItem id="_IDGenListItem" key="{unit_type}" text="{unit_type}"/>
+                </items>
+            </ComboBox>
+            <Label id="_IDGenLabel12" text="OR Create New" class="sapUiTinyMarginTop"></Label>
+            <Input id="customCategory" placeholder="Type New Category" change=".onCustomCategoryChange"/>
+
+            <Label id="_IDGenLabel4" text="Price" required="true"/>
+            <Input id="newPrice" type="Number" description="BDT"/>
+            <Label id="_IDGenLabel4a" text="Reorder Level" required="true"/>
+            <Input id="newReorder" type="Number" description="units"/>
+        </f:SimpleForm>
+        <beginButton>
+            <Button id="_IDGenButton3" text="Save" type="Accept" press=".onSaveNewModel"/>
+        </beginButton>
+        <endButton>
+            <Button id="_IDGenButton7" text="Cancel" press=".onCloseDialog"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

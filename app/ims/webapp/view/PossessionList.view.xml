@@ -1,0 +1,155 @@
+<mvc:View controllerName="ims.controller.PossessionList" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:fb="sap.ui.comp.filterbar" xmlns:smartfilterbar="sap.ui.comp.smartfilterbar">
+    <Page id="_IDGenPage" title="My Items" showNavButton="true" navButtonPress=".onNavBack">
+        <content>
+
+            <IconTabBar id="idIconTabBar" select=".onTabSelect" class="sapUiResponsiveContentPadding">
+    <items>
+        <IconTabFilter id="_IDGenIconTabFilter" text="Current Possessions" icon="sap-icon://employee">
+        <fb:FilterBar id="currentPossFilterBar" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+                <fb:filterGroupItems>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemPoss" name="Product" label="Product ID" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterPossProduct_ID" items="{
+												path: '/Products',
+												templateShareable: true
+											}">
+                                <items>
+                                    <core:Item id="_IDGenItemaAPoss" xmlns:core="sap.ui.core" key="{code}" text="{code}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemPoss2" name="Product_cat" label="Category" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterPossProduct_category" items="{
+												path: '/DashboardCards',
+												templateShareable: true
+											}">
+                                <items>
+                                    <core:Item id="_IDGenItemaAPoss2" xmlns:core="sap.ui.core" key="{unit_type}" text="{unit_type}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemPoss1" name="Product_model" label="Model" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterPossProduct_model" items="{
+												path: '/ModelNames',
+												templateShareable: true
+											}">
+        
+                                <items>
+                                    <core:Item id="_IDGenItemaAPoss1" xmlns:core="sap.ui.core" key="{name}" text="{name}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItemPoss3" name="Product_approver" label="Approver" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterPossProduct_approver" items="{
+												path: '/Users',
+                                                filters: [{path: 'role', operator: 'EQ', value1: 'admin'}],
+												templateShareable: true
+											}">
+        
+                                <items>
+                                    <core:Item id="_IDGenItemaAPoss3" xmlns:core="sap.ui.core" key="{ID}" text="{name}"/>
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem2b" name="Request ID" label="Request ID" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <MultiComboBox id="filterPossRequestNo" items="{
+												path: '/Requests',
+												templateShareable: true
+											}">
+        
+                                <items>
+                                    <core:Item id="_IDGenItemb" xmlns:core="sap.ui.core" key="{requestNo}" text="{requestNo}" />
+                                    
+                                </items>
+                            </MultiComboBox>
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    <fb:FilterGroupItem id="_IDGenFilterGroupItem2c" name="Date" label="Date Range" groupName="G1" visibleInFilterBar="true">
+                        <fb:control>
+                            <DateRangeSelection 
+                                id="filterPossDateRange" 
+                                displayFormat="yyyy-MM-dd" 
+                                change=".onFilterChange" />
+                        </fb:control>
+                    </fb:FilterGroupItem>
+                    
+                </fb:filterGroupItems>
+            </fb:FilterBar>
+            <Table id="possessionsTable" 
+            mode="MultiSelect" 
+            selectionChange=".onSelectionChange"
+            items="{
+                path: '/Products',
+                parameters: {
+                    $expand: 'details,currentPossession,requests($expand=parent($expand=logs($expand=performedBy)))'
+                }                
+                }">
+                <headerToolbar>
+                    <OverflowToolbar id="_IDGenOverflowToolbar4">
+                        <Title id="_IDGenTitle6" text="Items Currently In Field" />
+                        <ToolbarSpacer id="_IDGenToolbarSpacer6" />
+                        <Button id="btnReturn" text="Return" press=".onOpenActionDialog('return')"  type="Negative" />
+                        <Button id="btnRepair" text="Repair" press=".onOpenActionDialog('repair')"  type="Attention" />
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column id="_IDGenColumn27"><Text id="_IDGenText43" text="Asset Code" /></Column>
+                    <Column id="_IDGenColumn27a"><Text id="_IDGenText43a" text="Category" /></Column>
+                    <Column id="_IDGenColumn28"><Text id="_IDGenText47" text="Model" /></Column>
+                    <Column id="_IDGenColumn29"><Text id="_IDGenText48" text="Approver" /></Column>
+                    <Column id="_IDGenColumn29a"><Text id="_IDGenText48a" text="Request No" /></Column>
+                    <Column id="_IDGenColumn29b"><Text id="_IDGenText48b" text="Possessing Since" /></Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem10">
+                        <cells>
+                            <Text id="_IDGenText49" text="{code}" />
+                            <Text id="_IDGenText51a" text="{details/unit_type}" />
+                            <Text id="_IDGenText51" text="{details/name}" />
+                            <Text id="_IDGenText52" text="{requests/parent/logs/performedBy/name} ({requests/parent/logs/performedBy/email})" />
+                            <Text id="_IDGenText52a" text="{requests/parent/requestNo}" />
+                            <Text id="_IDGenText52b" text="{requests/parent/logs/timestamp}" />
+
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </IconTabFilter>
+
+        <IconTabFilter id="_IDGenIconTabFilter1" text="Transaction History" icon="sap-icon://history">
+            <Table id="historyTable" items="{path: '/Logs', sorter: {path: 'timestamp', descending: true}}">
+                <columns>
+                    <Column id="_IDGenColumn30"><Text id="_IDGenText56" text="Date" /></Column>
+                    <Column id="_IDGenColumn31"><Text id="_IDGenText57" text="Asset" /></Column>
+                    <Column id="_IDGenColumn34"><Text id="_IDGenText58" text="Action" /></Column>
+                    <Column id="_IDGenColumn35"><Text id="_IDGenText59" text="Admin" /></Column>
+                </columns>
+                <items>
+                    <ColumnListItem id="_IDGenColumnListItem11">
+                        <cells>
+                            <Text id="_IDGenText60" text="{timestamp}" />
+                            <Text id="_IDGenText61" text="{product/code}" />
+                            <ObjectStatus id="_IDGenObjectStatus6" text="{action}" state="{= ${action} === 'CHECKED_OUT' ? 'Success' : 'Information' }" />
+                            <Text id="_IDGenText62" text="{performedBy/name}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </IconTabFilter>
+    </items>
+</IconTabBar>
+        </content>
+    </Page>
+</mvc:View>
