@@ -53,7 +53,7 @@ modules:
   path: gen
   requires:
   - name: final_inventory-auth
-  - name: srv-api
+  - name: final_inventory-destination
   - name: final_inventory-html5-repo-host
     parameters:
       config:
@@ -148,7 +148,7 @@ resources:
           - Authentication: NoAuthentication
             HTML5.DynamicDestination: true
             HTML5.ForwardAuthToken: true
-            Name: srv-api
+            Name: final_inventory-srv
             ProxyType: Internet
             Type: HTTP
             URL: ~{srv-api/srv-url}
