@@ -1,7 +1,7 @@
 {
   "welcomeFile": "ims",
   "authenticationMethod": "route",
-   "logout": {
+  "logout": {
     "logoutEndpoint": "/app-logout",
     "logoutPage": "/"
   },

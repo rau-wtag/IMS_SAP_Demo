@@ -59,10 +59,65 @@ sap.ui.define([
             // Set the model globally so "message>/" works everywhere
             this.setModel(oMessageManager.getMessageModel(), "message");
 
+            this._attachSessionTimeoutHandler();
+
             // enable routing
             this.getRouter().initialize();
 
 
+        },
+
+        _attachSessionTimeoutHandler: function () {
+            // Get the Global Message Manager (Where all OData errors are reported)
+            var oMessageManager = sap.ui.getCore().getMessageManager();
+            var oMessageModel = oMessageManager.getMessageModel();
+
+            // Watch for new error messages
+            var oBinding = oMessageModel.bindList("/");
+            
+            oBinding.attachChange(function (oEvent) {
+                var aContexts = oEvent.getSource().getContexts();
+                var bSessionExpired = false;
+
+                aContexts.forEach(function (oContext) {
+                    var oMessage = oContext.getObject();
+                    
+                    // CHECK 1: Standard 401/403 Errors
+                    if (oMessage.code === "401" || oMessage.code === "403") {
+                        bSessionExpired = true;
+                    }
+
+                    // CHECK 2: The "HTML in JSON" Parser Error
+                    // This happens when AppRouter redirects an API call to the Login Page HTML
+                    if (oMessage.technical && oMessage.message && 
+                        (oMessage.message.includes("Unexpected token") || oMessage.message.includes("is not valid JSON"))) {
+                        bSessionExpired = true;
+                    }
+                });
+
+                if (bSessionExpired) {
+                    this._handleSessionExpiration();
+                }
+            }.bind(this));
+        },
+
+        _handleSessionExpiration: function () {
+            // Prevent multiple alerts popping up at once
+            if (this._bLogoutTriggered) {
+                return;
+            }
+            this._bLogoutTriggered = true;
+
+            // Show a friendly message, then Redirect
+            MessageBox.alert("Your session has expired due to inactivity. Please log in again.", {
+                icon: MessageBox.Icon.WARNING,
+                title: "Session Expired",
+                actions: [MessageBox.Action.OK],
+                onClose: function () {
+                    // Redirect to your logout endpoint to clean up standard & XSUAA sessions
+                    window.location.replace("/app-logout");
+                }
+            });
         }
     });
 });
