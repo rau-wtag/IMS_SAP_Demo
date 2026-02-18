@@ -4,41 +4,6 @@ const { UPDATE, INSERT, SELECT } = require('@sap/cds/lib/ql/cds-ql');
 module.exports = cds.service.impl(async function() {
     const { Details, Products, RequestItems, Requests, Logs, Users } = this.entities;
 
-    // this.before(['CREATE', 'UPDATE', 'DELETE'], [Details, Products], async (req) => {
-    
-    //     const userRole = req.headers['x-user-role']; 
-    //     console.log("userRole: " + userRole)
-    //     if (userRole !== 'admin') {
-    //         req.error(403, "Forbidden: Only administrators can modify inventory data.");
-    //     }
-    // });
-
-    // this.before('*', async (req) => {
-    //     console.log('>>> Method:', req.method);
-    //     console.log('>>> User:', req.user.id);
-    //     console.log('>>> Roles:', req.user.roles);
-    //     console.log('>>> All data available:', req.user)
-
-    //     try {
-    //         // This automatically looks up the 'XSUAA-API' destination 
-    //         // and handles the OAuth token fetch for you.
-    //         const response = await executeHttpRequest(
-    //             { destinationName: 'XSUAA-API' },
-    //             {
-    //                 method: 'GET',
-    //                 url: '/Users' // SCIM Endpoint for Users
-    //             }
-    //         );
-
-    //         //console.log(response.data.resources)
-
-    //         return response.data.resources; // The list of users
-    //     } catch (error) {
-    //         console.error("Error fetching users:", error.message);
-    //         req.error(500, "Could not fetch users from BTP");
-    //     }
-    
-    // });     
     this.on('getUserInfo', async (req) => {
         try {
             console.log('>>> Method:', req.method);

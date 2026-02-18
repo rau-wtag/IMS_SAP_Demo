@@ -48,6 +48,8 @@ modules:
     disk-quota: 256M
     keep-existing-routes: true
     memory: 256M
+  properties:
+    SESSION_TIMEOUT: 2
 - name: final_inventory-app-deployer
   type: com.sap.application.content
   path: gen
@@ -115,6 +117,8 @@ resources:
       oauth2-configuration:
         redirect-uris:
         - https://*~{app-api/app-uri}/**
+        token-validity: 120
+        refresh-token-validity: 120
       tenant-mode: dedicated
       xsappname: final_inventory-${org}-${space}
     path: ./xs-security.json

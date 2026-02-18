@@ -13,6 +13,8 @@ sap.ui.define([
             ]
         },
 
+        countdown: 240000, //4 minutes, autologout >> approuter session timeout
+
         init() {
             // call the base component's init function
             UIComponent.prototype.init.apply(this, arguments);
@@ -54,12 +56,12 @@ sap.ui.define([
             this.setModel(oCartModel, "cart");
 
             var oMessageManager = sap.ui.getCore().getMessageManager();
-    // Register the entire Component so ALL views automatically get validation errors
             oMessageManager.registerObject(this, true);
             // Set the model globally so "message>/" works everywhere
             this.setModel(oMessageManager.getMessageModel(), "message");
 
-            this._attachSessionTimeoutHandler();
+            this._startInactivityTimer();
+            this._setupActivityListeners();
 
             // enable routing
             this.getRouter().initialize();
@@ -67,57 +69,32 @@ sap.ui.define([
 
         },
 
-        _attachSessionTimeoutHandler: function () {
-            // Get the Global Message Manager (Where all OData errors are reported)
-            var oMessageManager = sap.ui.getCore().getMessageManager();
-            var oMessageModel = oMessageManager.getMessageModel();
-
-            // Watch for new error messages
-            var oBinding = oMessageModel.bindList("/");
+        _setupActivityListeners: function() {
+            const aEvents = ["mousemove", "keydown", "click", "touchstart", "scroll"];
             
-            oBinding.attachChange(function (oEvent) {
-                var aContexts = oEvent.getSource().getContexts();
-                var bSessionExpired = false;
+            const fnReset = this._resetInactivityTimer.bind(this);
 
-                aContexts.forEach(function (oContext) {
-                    var oMessage = oContext.getObject();
-                    
-                    // CHECK 1: Standard 401/403 Errors
-                    if (oMessage.code === "401" || oMessage.code === "403") {
-                        bSessionExpired = true;
-                    }
-
-                    // CHECK 2: The "HTML in JSON" Parser Error
-                    // This happens when AppRouter redirects an API call to the Login Page HTML
-                    if (oMessage.technical && oMessage.message && 
-                        (oMessage.message.includes("Unexpected token") || oMessage.message.includes("is not valid JSON"))) {
-                        bSessionExpired = true;
-                    }
-                });
-
-                if (bSessionExpired) {
-                    this._handleSessionExpiration();
-                }
-            }.bind(this));
+            aEvents.forEach(sEvent => {
+                document.addEventListener(sEvent, fnReset);
+            });
         },
 
-        _handleSessionExpiration: function () {
-            // Prevent multiple alerts popping up at once
-            if (this._bLogoutTriggered) {
-                return;
+        _resetInactivityTimer: function() {
+            if (this._iTimerId) {
+                clearTimeout(this._iTimerId);
             }
-            this._bLogoutTriggered = true;
+            this._startInactivityTimer();
+        },
 
-            // Show a friendly message, then Redirect
-            MessageBox.alert("Your session has expired due to inactivity. Please log in again.", {
-                icon: MessageBox.Icon.WARNING,
-                title: "Session Expired",
-                actions: [MessageBox.Action.OK],
-                onClose: function () {
-                    // Redirect to your logout endpoint to clean up standard & XSUAA sessions
-                    window.location.replace("/app-logout");
-                }
-            });
+        /**
+         * Starts the actual countdown.
+         */
+        _startInactivityTimer: function() {
+            this._iTimerId = setTimeout(() => {
+                window.location.replace("/app-logout");
+            }, this.countdown);
         }
+
+       
     });
 });
