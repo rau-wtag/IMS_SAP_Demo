@@ -22,7 +22,7 @@ mta_archives/
 .DS_Store
 *.orig
 *.log
-
+package-lock.json
 *.iml
 *.flattened-pom.xml
 

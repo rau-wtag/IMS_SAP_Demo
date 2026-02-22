@@ -9,18 +9,26 @@
     "express": "^4"
   },
   "devDependencies": {
+    "@cap-js/cds-typer": ">=0.1",
+    "@cap-js/cds-types": "^0.16.0",
     "@cap-js/sqlite": "^2",
     "@sap/cds-dk": "^9",
+    "@types/jquery": "^3.5.33",
+    "@types/node": "^25.2.3",
     "cds-plugin-ui5": "^0.13.0",
+    "mbt": "^1.2.29",
     "rimraf": "^5.0.5",
-    "mbt": "^1.2.29"
+    "ts-node": "^10.9.2",
+    "tsx": "^4",
+    "typescript": "^5.9.3"
   },
   "scripts": {
     "start": "cds-serve",
     "watch-ims": "cds watch --open ims/index.html?sap-ui-xx-viewCache=false --livereload false",
     "undeploy": "cf undeploy final_inventory --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
-    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-ims_ts": "cds watch --open imsts/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "cds": {
     "requires": {
@@ -65,5 +73,8 @@
   "private": true,
   "workspaces": [
     "app/*"
-  ]
+  ],
+  "imports": {
+    "#cds-models/*": "./@cds-models/*/index.js"
+  }
 }

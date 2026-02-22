@@ -1,5 +1,5 @@
 {
-  "welcomeFile": "ims",
+  "welcomeFile": "imsts",
   "logout": {
     "logoutEndpoint": "/app-logout",
     "logoutPage": "/"
