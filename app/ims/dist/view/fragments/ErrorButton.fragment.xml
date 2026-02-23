@@ -1,4 +1,4 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" controllerName="ims.controller.ErrorHandler">
     <Button id="_IDGenButton29" 
         icon="sap-icon://alert" 
         text="{= ${message>/}.length }" 
