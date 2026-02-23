@@ -32,26 +32,24 @@ sap.ui.define(["sap/ui/core/UIComponent", "sap/ui/model/json/JSONModel", "./mode
       this._setupActivityListeners();
       this.getRouter().initialize();
     }
-    _loadUser(oSecurityModel) {
-      $.get("/odata/v4/catalog/getUserInfo()").done(data => {
-        let oData = data.value ?? data;
-        if (typeof oData === "string") {
-          oData = JSON.parse(oData);
-        }
+    async _loadUser(oSecurityModel) {
+      const oModel = this.getModel();
+      try {
+        const oContext = oModel.bindContext("/getUserInfo()");
+        const oResult = await oContext.requestObject();
         const oFreshData = {
-          isAdmin: oData.isAdmin,
-          isEmployee: oData.isEmployee,
-          user: oData.email,
-          ID: oData.ID,
-          name: oData.name,
-          role: oData.role
+          isAdmin: oResult.isAdmin,
+          isEmployee: oResult.isEmployee,
+          user: oResult.email,
+          ID: oResult.ID,
+          name: oResult.name,
+          role: oResult.role
         };
         oSecurityModel.setData(oFreshData);
         localStorage.setItem("inventoryUser", JSON.stringify(oFreshData));
-      }).fail(() => {
-        const oRouter = this.getRouter();
-        oRouter.navTo("Login");
-      });
+      } catch (error) {
+        this.getRouter().navTo("Login");
+      }
     }
     _setupActivityListeners() {
       const aEvents = ["mousemove", "keydown", "click", "touchstart", "scroll"];

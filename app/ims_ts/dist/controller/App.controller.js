@@ -1,2 +1,2 @@
-sap.ui.define(["sap/ui/core/mvc/Controller"],function(n){"use strict";const t=n.extend("imsts.controller.App",{onInit:function n(){}});return t});
+sap.ui.define(["sap/ui/core/mvc/Controller"],function(e){"use strict";const n=e.extend("imsts.controller.App",{onInit:function e(){},onLogout:function e(){var n=this.getOwnerComponent().getModel("security");n.setData({isAdmin:false,isLoggedIn:false,user:"",name:"",ID:"",role:""});window.location.href="/app-logout"}});return n});
 //# sourceMappingURL=App.controller.js.map

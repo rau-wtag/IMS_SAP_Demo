@@ -1,2 +1,2 @@
-sap.ui.define(["sap/ui/core/mvc/Controller"],function(n){"use strict";const t=n.extend("imsts.controller.home",{onInit:function n(){}});return t});
+sap.ui.define(["./ErrorHandler"],function(e){"use strict";function r(e){return e&&e.__esModule&&typeof e.default!=="undefined"?e.default:e}const t=r(e);const n=t.extend("imsts.controller.home",{onInit:function e(){},formatCurrencyShort:function e(r){if(!r)return"0";var t=parseFloat(r);if(t>=1e6){return(t/1e6).toFixed(1)}else if(t>=1e3){return(t/1e3).toFixed(1)}return t.toFixed(0)},formatScale:function e(r){if(!r)return"BDT";var t=parseFloat(r);if(t>=1e6){return"M BDT"}else if(t>=1e3){return"K BDT"}return"BDT"}});return n});
 //# sourceMappingURL=home.controller.js.map

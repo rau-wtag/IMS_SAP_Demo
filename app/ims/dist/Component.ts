@@ -3,14 +3,6 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import {createDeviceModel } from "./model/models";
 import Router from  "sap/ui/core/routing/Router";
 
-interface SecurityData {
-    isAdmin: boolean;
-    isEmployee: boolean;
-    user: string;
-    ID: string;
-    name: string;
-    role: string;
-}
 
 export default class Component extends UIComponent {
     public static metadata = {
@@ -29,7 +21,7 @@ export default class Component extends UIComponent {
         this.setModel(createDeviceModel(), "device");
 
         const sSavedUser = localStorage.getItem("inventoryUser");
-        const oUserData : SecurityData = sSavedUser ? JSON.parse(sSavedUser) : {isAdmin: false, isEmployee: false, user: "", ID: "", name: "", role:"" };
+        const oUserData = sSavedUser ? JSON.parse(sSavedUser) : {isAdmin: false, isEmployee: false, user: "", ID: "", name: "", role:"" };
         const oSecurityModel = new JSONModel(oUserData);
         this.setModel(oSecurityModel, "security");
 
@@ -49,30 +41,29 @@ export default class Component extends UIComponent {
 
     }
 
-    private _loadUser(oSecurityModel : JSONModel) : void {
-        $.get("/odata/v4/catalog/getUserInfo()")
-            .done((data: any) => {
-                let oData = data.value ?? data;
-                if (typeof oData === "string") {
-                    oData = JSON.parse(oData);
-                }
+    private async _loadUser(oSecurityModel : JSONModel) : Promise<void> {
+        const oModel = this.getModel() as any;
 
-                const oFreshData: SecurityData = {
-                    isAdmin: oData.isAdmin,
-                    isEmployee: oData.isEmployee,
-                    user: oData.email,
-                    ID: oData.ID,
-                    name: oData.name,
-                    role: oData.role
-                };
-
-                oSecurityModel.setData(oFreshData);
-                localStorage.setItem("inventoryUser", JSON.stringify(oFreshData));
-            })
-            .fail(() => {
-                const oRouter: Router = this.getRouter();
-                oRouter.navTo("Login");
-            });
+        try {
+            const oContext = oModel.bindContext("/getUserInfo()");
+            const oResult = await oContext.requestObject();
+        
+            const oFreshData = {
+                isAdmin: oResult.isAdmin,
+                isEmployee: oResult.isEmployee,
+                user: oResult.email,
+                ID: oResult.ID,
+                name: oResult.name,
+                role: oResult.role
+            };
+        
+            oSecurityModel.setData(oFreshData);
+            localStorage.setItem("inventoryUser", JSON.stringify(oFreshData));
+        
+        } catch (error) {
+        
+            this.getRouter().navTo("Login");
+        }
     }
 
     private _setupActivityListeners(): void {

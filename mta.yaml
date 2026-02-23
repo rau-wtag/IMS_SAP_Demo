@@ -100,8 +100,6 @@ resources:
       oauth2-configuration:
         redirect-uris:
         - https://*~{app-api/app-uri}/**
-        refresh-token-validity: 120
-        token-validity: 120
       tenant-mode: dedicated
       xsappname: final_inventory-${org}-${space}
     path: ./xs-security.json
@@ -155,7 +153,6 @@ resources:
       name: srv-api
       url: ~{srv-url}
 parameters:
-  deploy_mode: html5-repo
   enable-parallel-deployments: true
 build-parameters:
   before-all:

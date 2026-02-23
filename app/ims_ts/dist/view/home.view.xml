@@ -1,6 +1,208 @@
-<mvc:View controllerName="imsts.controller.home"
+<mvc:View
+    controllerName="imsts.controller.home"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:f="sap.f" 
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:core="sap.ui.core"
+>
+    <Page id="mainPage" title="Hello {security>/name} " backgroundDesign="List" showFooter="true">
+        <headerContent>
+            <Button 
+                id="adminCreateBtn"
+                icon="sap-icon://add" 
+                text="Create New Category" 
+                type="Emphasized" 
+                visible="{security>/isAdmin}"
+                press=".onOpenCreateDialog" />
+            <Button id="_IDGenButton2" icon="sap-icon://pull-request" text="Requests ({/PendingRequests/$count})" press=".onNavToRequests" type="Transparent" />
+            <Button id="_IDGenButton24" icon="sap-icon://history" text="Logs" press=".onNavToLogs" type="Transparent" />
+            <Button id="_IDGenButton25" icon="sap-icon://employee" text="My Items" press=".onNavToPossessions" type="Transparent" />
+        </headerContent>
+        
+        <content>
+            <VBox id="_IDGenVBox" class="sapUiSmallMargin">
+                
+                <layout:Grid id="_IDGenGrid" defaultSpan="XL6 L6 M12 S12" vSpacing="1" hSpacing="1">
+                    
+                    <VBox id="_IDGenVBox6">
+                        <HBox id="_IDGenHBox" alignItems="Center" justifyContent="SpaceBetween">
+                            <Title id="_IDGenTitle" text="Asset Categories" titleStyle="H2" />
+                            <SearchField id="categorySearch" width="250px" placeholder="Search category..." search=".onSearchCategory" />
+                        </HBox>
+                        <ScrollContainer id="_IDGenScrollContainer" height="180px" horizontal="true" vertical="false" width="100%" class="sapUiSmallMarginTop">
+                            <HBox id="categoryHBox" items="{/DashboardCards}">
+                                <GenericTile id="_IDGenGenericTile" header="{unit_type}" subheader="Category" press=".onCardPress" class="sapUiTinyMarginEnd">
+                                    <TileContent id="_IDGenTileContent"><NumericContent id="_IDGenNumericContent" value="{total_count}" icon="sap-icon://product" /></TileContent>
+                                </GenericTile>
+                            </HBox>
+                        </ScrollContainer>
+                    </VBox>
+
+                    <!-- <VBox id="_IDGenVBox7">
+                        <Title id="_IDGenTitle2" text="System Alerts" titleStyle="H2" class="sapUiSmallMarginBottom" />
+                        <layout:Grid id="_IDGenGrid1" defaultSpan="XL4">
+                            <GenericTile id="_IDGenGenericTile1" header="Restock Budget" subheader="Low Stock Alerts" press=".onShowRestockPopover" state="Loaded">
+                                <TileContent id="_IDGenTileContent1"><NumericContent id="_IDGenNumericContent1" value="{path: 'ui>/totalRestockCost', formatter: '.formatCurrencyShort'}" scale="{path: 'ui>/totalRestockCost', formatter: '.formatScale'}" valueColor="Error" icon="sap-icon://cart-4" /></TileContent>
+                            </GenericTile>
+                            <GenericTile id="_IDGenGenericTile2" header="Repair Estimates" subheader="Maintenance Cost" press=".onShowRepairPopover">
+                                <TileContent id="_IDGenTileContent2"><NumericContent id="_IDGenNumericContent2" value="{path: 'ui>/totalRepairCost', formatter: '.formatCurrencyShort'}" 
+                scale="{path: 'ui>/totalRepairCost', formatter: '.formatScale'}" icon="sap-icon://tools-opportunity" valueColor="Critical" /></TileContent>
+                            </GenericTile>
+                            <GenericTile id="_IDGenGenericTile3" header="Inventory Valuation" subheader="Total Asset Worth" 
+                                     press=".onShowValuationPopover" >
+                            <TileContent id="_IDGenTileContent3">
+                                <NumericContent id="_IDGenNumericContent3" value="{path: 'ui>/totalEvalCost', formatter: '.formatCurrencyShort'}" 
+                scale="{path: 'ui>/totalEvalCost', formatter: '.formatScale'}" valueColor="Good" icon="sap-icon://money-bills" />
+                            </TileContent>
+                        </GenericTile>
+                        </layout:Grid>
+                    </VBox> -->
+                </layout:Grid>
+
+                <FlexBox id="_IDGenFlexBox" direction="Row" width="100%" height="500px" class="sapUiContentPadding" justifyContent="Center">
+                    <items>
+                        <layout:FixFlex id="_IDGenFixFlex" minFlexSize="400" class="sapUiMediumMarginTop">
+                    <layout:flexContent>
+                        <viz:VizFrame id="idVizFramePie" vizType="pie"
+                            busy="{ui>/isChartLoading}"
+                            vizProperties="{ 'title': { 'text': 'Asset Status Distribution', 'visible': true }}">
+                            <viz:dataset>
+                                <viz.data:FlattenedDataset id="_IDGenFlattenedDataset" data="{/StatusAnalytics}">
+                                    <viz.data:dimensions>
+                                        <viz.data:DimensionDefinition id="_IDGenDimensionDefinition" name="Status" value="{status}" />
+                                    </viz.data:dimensions>
+                                    <viz.data:measures>
+                                        <viz.data:MeasureDefinition id="_IDGenMeasureDefinition" name="Quantity" value="{count}" />
+                                    </viz.data:measures>
+                                </viz.data:FlattenedDataset>
+                            </viz:dataset>
+                            <viz:feeds>
+                                <viz.feeds:FeedItem id="_IDGenFeedItem" uid="size" type="Measure" values="Quantity" />
+                                <viz.feeds:FeedItem id="_IDGenFeedItem1" uid="color" type="Dimension" values="Status" />
+                            </viz:feeds>
+                        </viz:VizFrame>
+                            </layout:flexContent>
+                        </layout:FixFlex>
+                        <VBox id="_IDGenVBox12" justifyContent="Center">
+    
+                            <layout:FixFlex id="_IDGenFixFlex1" minFlexSize="400" class="sapUiMediumMarginTop">
+                                <layout:flexContent>
+                                    <viz:VizFrame id="idVizFramePie1" vizType="donut"
+                                        vizProperties="{ 'title': { 'text': 'Asset In-Use Vs. Available Distribution', 'visible': true }}">
+                                        <viz:dataset>
+                                            <viz.data:FlattenedDataset id="_IDGenFlattenedDataset1" data="{/CategoryDistribution}">
+                                                <viz.data:dimensions>
+                                                    <viz.data:DimensionDefinition id="_IDGenDimensionDefinition1" name="Status" value="{unit_type}" />
+                                                </viz.data:dimensions>
+                                                <viz.data:measures>
+                                                    <viz.data:MeasureDefinition id="_IDGenMeasureDefinitio1n" name="Quantity" value="{amount}" />
+                                                </viz.data:measures>
+                                            </viz.data:FlattenedDataset>
+                                        </viz:dataset>
+                                        <viz:feeds>
+                                            <viz.feeds:FeedItem id="_IDGenFeedItem1111" uid="size" type="Measure" values="Quantity" />
+                                            <viz.feeds:FeedItem id="_IDGenFeedItem11" uid="color" type="Dimension" values="Status" />
+                                        </viz:feeds>
+                                    </viz:VizFrame>
+                                </layout:flexContent>
+                            </layout:FixFlex>
+                            <RadioButtonGroup id="_IDGenRadioButtonGroup" columns="2" select=".onToggleDistribution" class="sapUiSmallMarginBottom">
+                                    <RadioButton id="_IDGenRadioButton" text="Available" selected="true" />
+                                    <RadioButton id="_IDGenRadioButton1" text="In-Use (Assigned)" />
+                            </RadioButtonGroup>
+                        </VBox>
+                    
+                        
+                    </items>
+                </FlexBox>
+
+                <layout:Grid id="_IDGenGrid2" defaultSpan="XL6 L6 M12 S12" vSpacing="1" hSpacing="1" class="sapUiMediumMarginTop">
+                    <f:Card id="_IDGenCard1" height="450px">
+                        <f:header>
+                            <card:Header id="_IDGenHeader2" xmlns:card="sap.f.cards" title="Live Assignments" subtitle="Current Holders" iconSrc="sap-icon://group" />
+                        </f:header>
+                        <f:content>
+                            <ScrollContainer id="_IDGenScrollContainer1" height="350px" vertical="true">
+                                <!-- <Table id="possDashboard" items="{path: '/Products'}">
+                                    <columns>
+                                        <Column id="_IDGenColumn38"><Text id="_IDGenText69" text="Asset" /></Column>
+                                        <Column id="_IDGenColumn39"><Text id="_IDGenText70" text="Possessor" /></Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem id="_IDGenColumnListItem14">
+                                            <cells>
+                                                <Text id="_IDGenText71" text="{details/name}" />
+                                                <ObjectIdentifier id="_IDGenObjectIdentifier4" title="{currentPossession/name}" text="{currentPossession/email}" />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table> -->
+                                <Table id="idUserPossessionTable" 
+                                    items="{
+                                        path: '/Users',
+                                        sorter: { path: 'name', descending: false }, 
+                                        parameters: { $expand: 'possessions($expand=details)' }
+                                    }">
+                                    <columns>
+                                        <Column id="_IDGenColumn38"><Text id="_IDGenText50" text="User Name" /></Column>
+                                        <Column id="_IDGenColumn39" hAlign="End"><Text id="_IDGenText69" text="Items Count" /></Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem id="_IDGenColumnListItem14">
+                                            <cells>
+                                                <ObjectIdentifier id="_IDGenObjectIdentifier4" 
+                                                    title="{name}" 
+                                                    text="{email}" 
+                                                    tooltip="{path: 'possessions'}" />
+
+                                                <ObjectStatus id="_IDGenObjectStatus8" 
+                                                    text="{possessions/$count}" 
+                                                    state="{= ${possessions/$count} > 5 ? 'Error' : 'None' }" />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </ScrollContainer>
+                        </f:content>
+                    </f:Card>
+
+                    <f:Card id="_IDGenCard2" height="450px">
+                        <f:header>
+                            <card:Header id="_IDGenHeader3" xmlns:card="sap.f.cards" title="Activity Summary" subtitle="Last 7 Days" iconSrc="sap-icon://activity-items" />
+                        </f:header>
+                        <f:content>
+                            <IconTabBar id="_IDGenIconTabBar" class="sapUiNoContentPadding">
+                                <items>
+                                    <IconTabFilter id="_IDGenIconTabFilter2" text="Restocks" icon="sap-icon://add-product" count="{/RecentRestocks/$count}">
+                                        <ScrollContainer id="_IDGenScrollContainer2" height="320px" vertical="true" horizontal="false" >
+                                        <List id="_IDGenList2" items="{/RecentRestocks}">
+                                            <StandardListItem id="_IDGenStandardListItem" title="{modelName}" description="{productCode}: {action}" info="{path: 'timestamp', type: 'DateTime', formatOptions: {relative: true}}" />
+                                        </List>
+                                        </ScrollContainer>
+                                    </IconTabFilter>
+                                    <IconTabFilter id="_IDGenIconTabFilter3" text="Requests" icon="sap-icon://request" count="{/WeeklyActivity/$count}">
+                                        <ScrollContainer id="_IDGenScrollContainer3" height="320px" vertical="true" horizontal="false" >
+                                        <List id="_IDGenList3" items="{/WeeklyActivity}">
+                                            <StandardListItem id="_IDGenStandardListItem3" title="{requestNo}" description="{requester}" info="{status}" />
+                                        </List>
+                                        </ScrollContainer>
+                                    </IconTabFilter>
+                                </items>
+                            </IconTabBar>
+                        </f:content>
+                    </f:Card>
+                </layout:Grid>
+            </VBox>
+        </content>
+        <footer>
+        <OverflowToolbar id="_IDGenOverflowToolbar8">
+            <ToolbarSpacer id="_IDGenToolbarSpacer5"/>
+            <core:Fragment id="_IDGenFragment" fragmentName="imsts.view.fragments.ErrorButton" type="XML"/>
+        </OverflowToolbar>
+    </footer>
     </Page>
 </mvc:View>

@@ -1,4 +1,4 @@
-import cds, {ApplicationService, Request} from '@sap/cds';
+import cds, {ApplicationService, Request} from "@sap/cds";
 
 import {Details, Products, Requests, RequestItems, Logs, Users} from '#cds-models/my/inventory';
 
@@ -34,6 +34,7 @@ export class CatalogService extends ApplicationService {
                         role: hanaRole 
                     });
                     userProfile = { ID: userEmail, name: fullName, email: userEmail, role: hanaRole };
+                    console.log("User exists, don't believe these errors")
                 }
     
                 return {
