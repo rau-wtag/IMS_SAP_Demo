@@ -15,28 +15,50 @@ sap.ui.define(["sap/ui/core/mvc/Controller", "sap/m/MessageBox", "sap/ui/model/j
 
             this.getView().setBusy(true)
 
-            $.get("/odata/v4/catalog/getUserInfo()")
-                .done(function(data) {
-                    sap.ui.core.BusyIndicator.hide();
-                    // If successful, the user is now authenticated!
-                    // Navigate them to the home page
-                    var oUser = data.value ? data.value : data;
+            this._loadUser();
+            //this._checkSession();
+        },
+
+        _loadUser: function () {
+
+            var oSecurityModel = this.getOwnerComponent().getModel("security");
+            var oModel = this.getOwnerComponent().getModel(); // OData V4 model
+
+            var oContextBinding = oModel.bindContext("/getUserInfo()");
+
+            oContextBinding.requestObject()
+                .then(function (oUser) {
+
                     oSecurityModel.setProperty("/user", oUser.email);
                     oSecurityModel.setProperty("/name", oUser.name);
                     oSecurityModel.setProperty("/ID", oUser.ID);
-                    oSecurityModel.setProperty("/role", oUser.role); // 'admin' or 'user'
+                    oSecurityModel.setProperty("/role", oUser.role);
                     oSecurityModel.setProperty("/isAdmin", oUser.isAdmin);
                     oSecurityModel.setProperty("/isEmployee", oUser.isEmployee);
-                    console.log(oSecurityModel.getData())
+
                     this.getOwnerComponent().getRouter().navTo("Routehome");
+
                 }.bind(this))
-                .fail(function() {
-                    
-                })
-                .always(function () {
+                .catch(function (err) {
+
+                    var sErrorMsg = "Authentication failed.";
+
+                    if (err && err.message) {
+                        sErrorMsg = err.message;
+                    }
+
+                    MessageBox.error(sErrorMsg, {
+                        title: "Access Denied",
+                        onClose: function () {
+                            this.getOwnerComponent().getRouter().navTo("Login");
+                        }.bind(this)
+                    });
+
+                }.bind(this))
+                .finally(function () {
                     this.getView().setBusy(false);
+                    BusyIndicator.hide();
                 }.bind(this));
-            //this._checkSession();
         },
 
         onEnter: function () {
